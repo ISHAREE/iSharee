@@ -353,7 +353,7 @@
 					<section class="section content" id="dashboard">
 						<div class="h-1">
 							<h1>Dashboard</h1>
-							<div id="status"></div>
+							<div id="status" class="status"></div>
 						</div>
 						<div class="main-header-line">
 							<div class="action-buttons">
@@ -596,7 +596,7 @@
 					<!-- photos contents go in here -->
 					<div class="h-1">
 						<h2>Photos</h2>
-						<div id="status"></div>
+						<div id="status" class="status"></div>
 					</div>
 
 					<div class="main-header-line">
@@ -961,7 +961,7 @@
 					<!-- videos contents go in here -->
 					<div class="h-1">
 						<h2>Video Files</h2>
-						<div id="status"></div>
+						<div id="status" class="status"></div>
 					</div>
 					<div class="main-header-line">
 						<div class="content-action-buttons">
@@ -1017,7 +1017,7 @@
 					<!-- audios contents go in here -->
 					<div class="h-1">
 						<h2>Audio Files</h2>
-						<div id="status"></div>
+						<div id="status" class="status"></div>
 					</div>
 
 					<div class="main-header-line">
@@ -1072,7 +1072,7 @@
 					<!-- files contents go in here -->
 					<div class="h-1">
 						<h1>Files</h1>
-						<div id="status"></div>
+						<div id="status" class="status"></div>
 					</div>
 					<div class="main-header-line">
 						<div class="content-action-buttons">
@@ -1133,7 +1133,7 @@
 					<!-- documents contents go in here -->
 					<div class="h-1">
 						<h2>Documents</h2>
-						<div id="status"></div>
+						<div id="status" class="status"></div>
 					</div>
 
 					<div class="main-header-line">
@@ -1194,7 +1194,7 @@
 					<!-- documents contents go in here -->
 					<div class="h-1">
 						<h2>Deleted Files</h2>
-						<div id="status"></div>
+						<div id="status" class="status"></div>
 					</div>
 
 					<div class="main-header-line">
@@ -1257,7 +1257,7 @@
 					<!-- documents contents go in here -->
 					<div class="h-1">
 						<h2>Personal Account</h2>
-						<div id="status"></div>
+						<div id="status" class="status"></div>
 					</div>
 					<div class="main-header-line">
 						<div class="content-action-buttons">
@@ -1879,7 +1879,7 @@
 					<!-- upload contents go in here -->
 					<div class="h-1">
 						<h2>Upload Files</h2>
-						<div id="status"></div>
+						<div id="status" class="status"></div>
 					</div>
 
 					<div class="main-header-line">
@@ -2217,36 +2217,52 @@
 		</script>
 
 		<script>
+			function updateStatusOnServer(status) {
+				fetch("/update_status", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ status: status }),
+				});
+			}
+
 			function updateStatus() {
-				const statusElement = document.getElementById("status");
+				const statusElements = document.querySelectorAll(".status");
 				const online = navigator.onLine;
 				const connection =
 					navigator.connection ||
 					navigator.mozConnection ||
 					navigator.webkitConnection;
 
-				if (!online) {
-					statusElement.textContent = "Offline";
-					statusElement.style.color = "red";
-				} else {
-					if (connection) {
-						const effectiveType = connection.effectiveType;
-						if (
-							effectiveType === "slow-2g" ||
-							effectiveType === "2g" ||
-							effectiveType === "3g"
-						) {
-							statusElement.textContent = "Slow Internet Connection";
-							statusElement.style.color = "orange";
+				statusElements.forEach((statusElement) => {
+					if (!online) {
+						statusElement.textContent = "Offline";
+						statusElement.style.color = "red";
+						updateStatusOnServer("Offline");
+					} else {
+						if (connection) {
+							const effectiveType = connection.effectiveType;
+							if (
+								effectiveType === "slow-2g" ||
+								effectiveType === "2g" ||
+								effectiveType === "3g"
+							) {
+								statusElement.textContent = "Slow Internet Connection";
+								statusElement.style.color = "orange";
+								updateStatusOnServer("Slow Internet Connection");
+							} else {
+								statusElement.textContent = "Online";
+								statusElement.style.color = "green";
+								updateStatusOnServer("Online");
+							}
 						} else {
 							statusElement.textContent = "Online";
 							statusElement.style.color = "green";
+							updateStatusOnServer("Online");
 						}
-					} else {
-						statusElement.textContent = "Online";
-						statusElement.style.color = "green";
 					}
-				}
+				});
 			}
 
 			// Initial check
