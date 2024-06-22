@@ -38,7 +38,8 @@
 			href="https://unpkg.com/cropperjs/dist/cropper.css"
 			rel="stylesheet" />
 		<script src="https://unpkg.com/cropperjs/dist/cropper.js"></script>
-		<!-- <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script> -->
+		<script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+
 		<style>
 			.container {
 				--uib-size: 40px;
@@ -2347,28 +2348,26 @@
 			}
 		</script>
 		<script>
-			function fetchOnlineStatus() {
-				fetch("/users/online_status")
-					.then((response) => response.json())
-					.then((data) => {
-						const onlineUsersList = document.getElementById("online-users");
-						onlineUsersList.innerHTML = "";
+			const socket = io();
 
-						data.online_users.forEach((user) => {
-							const listItem = document.createElement("li");
-							listItem.textContent = user;
-							onlineUsersList.appendChild(listItem);
-						});
-					})
-					.catch((error) =>
-						console.error("Error fetching online status:", error)
-					);
-			}
+			socket.on("connect", () => {
+				console.log("Connected to server");
+			});
 
-			// Fetch online status every 60 seconds
-			setInterval(fetchOnlineStatus, 60000);
-			// Initial fetch
-			window.onload = fetchOnlineStatus;
+			socket.on("online_status_update", (data) => {
+				const onlineUsersList = document.getElementById("online-users");
+				onlineUsersList.innerHTML = "";
+
+				const currentUser = data.current_user;
+				data.online_users.forEach((user) => {
+					if (user !== currentUser) {
+						// Exclude current user
+						const listItem = document.createElement("li");
+						listItem.textContent = user;
+						onlineUsersList.appendChild(listItem);
+					}
+				});
+			});
 		</script>
 
 		<script>
