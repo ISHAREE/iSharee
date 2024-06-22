@@ -36,9 +36,9 @@ app = Flask(__name__)
 # socketio = SocketIO(app)
 # socketio = SocketIO(app, cors_allowed_origins="*")
 
-# app.secret_key = os.urandom(24)
-# app.config['SESSION_TYPE'] = 'filesystem'
-# app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
+app.secret_key = os.urandom(24)
+app.config['SESSION_TYPE'] = 'filesystem'
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
 CORS(app, resources={r"/*": {"origins": "*"}})
 CORS(app, resources={r"/*": {"origins": "http://127.0.0.1:5501"}})
 
@@ -1869,21 +1869,44 @@ def success():
 #     flash('You have been logged out.', 'success')
 #     return response
 
+# @app.route('/logout', methods=['GET', 'POST'])
+# def logout():
+#     if request.method == 'POST':
+#         # Retrieve session_id from cookies
+#         session_id = request.cookies.get('session_id', 'session')
+#         session.pop('session', None)
+#         session.pop('session_id, None')
+#         response = make_response(redirect(url_for('login')))
+
+#         response.set_cookie('session', '', max_age=0)
+
+#         # Clear session data
+#         session.clear()
+
+#         # Delete session from database
+#         if session_id:
+#             conn = get_db_connection()
+#             with conn.cursor() as cursor:
+#                 cursor.execute('''DELETE FROM user_sessions WHERE session_id = %s''', (session_id,))
+#                 conn.commit()
+#             conn.close()
+
+#         # Redirect to login page
+#         flash('You have been logged out.', 'success')
+#         return redirect(url_for('login'))
+#     else:
+#         return redirect(url_for('login'))
+
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
     if request.method == 'POST':
-        # Retrieve session_id from cookies
-        session_id = request.cookies.get('session_id', 'session')
-        session.pop('session', None)
-        session.pop('session_id, None')
-        response = make_response(redirect(url_for('login')))
 
-        response.set_cookie('session', '', max_age=0)
+        session_id = request.cookies.get('session_id')
 
-        # Clear session data
+
         session.clear()
+        session.pop('session', None)
 
-        # Delete session from database
         if session_id:
             conn = get_db_connection()
             with conn.cursor() as cursor:
@@ -1891,13 +1914,10 @@ def logout():
                 conn.commit()
             conn.close()
 
-        # Redirect to login page
         flash('You have been logged out.', 'success')
         return redirect(url_for('login'))
     else:
-        # Handle GET request (optional, if needed)
         return redirect(url_for('login'))
-
 
 if __name__ == '__main__':
     app.run(debug=True)
