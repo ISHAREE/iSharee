@@ -1899,14 +1899,7 @@ def success():
 
 # function to clear and remove session_id when logout is called
 
-def del_session_id(session_id):
-    conn = get_db_connection()
-    try:
-        with conn.cursor() as cursor:
-            cursor.execute('''DELETE FROM user_sessions WHERE session_id = %s''', (session_id,))
-            conn.commit()
-    finally:
-        conn.close()
+
 
 
 # @app.route('/logout', methods=['GET', 'POST'])
@@ -1932,7 +1925,7 @@ def del_session_id(session_id):
 #         return redirect(url_for('login'))
 
 
-@app.route('/logout', methods=['POST'])
+@app.route('/logout', methods=['GET', 'POST'])
 def logout():
     session_id = request.cookies.get('session_id')
 
@@ -1947,6 +1940,16 @@ def logout():
     response.set_cookie('session', '', expires=0)
     flash('You have been logged out.', 'success')
     return response
+
+def del_session_id(session_id):
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute('''DELETE FROM user_sessions WHERE session_id = %s''', (session_id,))
+            conn.commit()
+    finally:
+        conn.close()
+
 
 
 if __name__ == '__main__':
