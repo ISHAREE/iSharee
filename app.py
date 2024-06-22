@@ -617,6 +617,25 @@ def generate_random_id(length=8):
     return random_id
 random_id = generate_random_id()
 
+@app.route('/update_status', methods=['POST'])
+def update_status():
+    if 'user_id' not in session:
+        return jsonify({'error': 'User not logged in'}), 403
+
+    data = request.get_json()
+    status = data.get('status')
+
+    # Save the status to the database or perform other actions
+    user_id = session['user_id']
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('UPDATE user_devices SET status = %s WHERE user_id = %s AND device_id = %s', (status, user_id, get_device_id(request)))
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return jsonify({'message': 'Status updated successfully'})
+
 @app.route('/users/online_status', methods=['GET'])
 def online_status():
     conn = get_db_connection()
