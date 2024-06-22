@@ -1897,27 +1897,57 @@ def success():
 #     else:
 #         return redirect(url_for('login'))
 
-@app.route('/logout', methods=['GET', 'POST'])
+# function to clear and remove session_id when logout is called
+
+def del_session_id(session_id):
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute('''DELETE FROM user_sessions WHERE session_id = %s''', (session_id,))
+            conn.commit()
+    finally:
+        conn.close()
+
+
+# @app.route('/logout', methods=['GET', 'POST'])
+# def logout():
+#     if request.method == 'POST':
+
+#         session_id = request.cookies.get('session_id')
+
+
+#         session.clear()
+#         session.pop('session', None)
+
+#         if session_id:
+#             conn = get_db_connection()
+#             with conn.cursor() as cursor:
+#                 cursor.execute('''DELETE FROM user_sessions WHERE session_id = %s''', (session_id,))
+#                 conn.commit()
+#             conn.close()
+
+#         flash('You have been logged out.', 'success')
+#         return redirect(url_for('login'))
+#     else:
+#         return redirect(url_for('login'))
+
+
+@app.route('/logout', methods=['POST'])
 def logout():
-    if request.method == 'POST':
+    session_id = request.cookies.get('session_id')
 
-        session_id = request.cookies.get('session_id')
+    if session_id:
+        del_session_id(session_id)
+    
+    session.clear()
+    session.pop('session', None)
 
+    response = make_response(redirect(url_for('login')))
+    response.set_cookie('session_id', '', expires=0)
+    response.set_cookie('session', '', expires=0)
+    flash('You have been logged out.', 'success')
+    return response
 
-        session.clear()
-        session.pop('session', None)
-
-        if session_id:
-            conn = get_db_connection()
-            with conn.cursor() as cursor:
-                cursor.execute('''DELETE FROM user_sessions WHERE session_id = %s''', (session_id,))
-                conn.commit()
-            conn.close()
-
-        flash('You have been logged out.', 'success')
-        return redirect(url_for('login'))
-    else:
-        return redirect(url_for('login'))
 
 if __name__ == '__main__':
     app.run(debug=True)
