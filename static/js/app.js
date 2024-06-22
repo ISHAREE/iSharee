@@ -596,9 +596,8 @@ function handlePDFClick(filename) {
     fetch(`/files/${filename}`)
         .then(response => response.arrayBuffer())
         .then(data => {
-            const pdfContainer = document.getElementById("pdfContainer");
-            pdfContainer.style.display = "block";
-            
+            const modalContent = document.getElementById("modalContent");
+            modalContent.innerHTML = '';
             const loadingTask = pdfjsLib.getDocument({data});
             loadingTask.promise.then(pdf => {
                 pdf.getPage(1).then(page => {
@@ -616,13 +615,12 @@ function handlePDFClick(filename) {
                     };
                     page.render(renderContext);
                     
-                    pdfContainer.innerHTML = '';
-                    pdfContainer.appendChild(canvas);
+                    modalContent.appendChild(canvas);
+                    showModal();
                 });
             });
         });
 }
-
 
 // Function to display and edit DOCX files
 function handleDOCXClick(filename) {
@@ -631,14 +629,37 @@ function handleDOCXClick(filename) {
         .then(data => {
             mammoth.convertToHtml({arrayBuffer: data})
                 .then(result => {
-                    const docxContainer = document.getElementById("docxContainer");
-                    docxContainer.style.display = "block";
-                    docxContainer.innerHTML = result.value;
+                    const modalContent = document.getElementById("modalContent");
+                    modalContent.innerHTML = result.value;
+                    showModal();
                 })
                 .catch(err => console.error('DOCX conversion error:', err));
         });
 }
 
+// Function to show the modal
+function showModal() {
+    const modal = document.getElementById("fileModal");
+    modal.style.display = "block";
+}
+
+// Function to close the modal
+function closeModal() {
+    const modal = document.getElementById("fileModal");
+    modal.style.display = "none";
+}
+
+
+// Event listener for close button
+document.querySelector(".close-button").addEventListener("click", closeModal);
+
+// Event listener to close modal when clicking outside of it
+window.addEventListener("click", function(event) {
+    const modal = document.getElementById("fileModal");
+    if (event.target === modal) {
+        closeModal();
+    }
+});
 
 //####################################################
 // Define a function to fetch and display files
