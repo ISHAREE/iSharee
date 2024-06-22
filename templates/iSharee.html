@@ -1250,6 +1250,7 @@
 					<!-- documents contents go in here -->
 					<div class="h-1">
 						<h2>Personal Account</h2>
+						<div id="status"></div>
 					</div>
 					<div class="main-header-line">
 						<div class="content-action-buttons">
@@ -1293,7 +1294,7 @@
 							</button>
 						</div>
 					</div>
-					
+
 					<div class="main-header-line-2">
 						<ul class="nav-lnks">
 							<li class="links active">
@@ -2205,6 +2206,50 @@
 			setInterval(fetchOnlineStatus, 60000);
 			// Initial fetch
 			window.onload = fetchOnlineStatus;
+		</script>
+
+		<script>
+			function updateStatus() {
+				const statusElement = document.getElementById("status");
+				const online = navigator.onLine;
+				const connection =
+					navigator.connection ||
+					navigator.mozConnection ||
+					navigator.webkitConnection;
+
+				if (!online) {
+					statusElement.textContent = "Offline";
+					statusElement.style.color = "red";
+				} else {
+					if (connection) {
+						const effectiveType = connection.effectiveType;
+						if (
+							effectiveType === "slow-2g" ||
+							effectiveType === "2g" ||
+							effectiveType === "3g"
+						) {
+							statusElement.textContent = "Slow Internet Connection";
+							statusElement.style.color = "orange";
+						} else {
+							statusElement.textContent = "Online";
+							statusElement.style.color = "green";
+						}
+					} else {
+						statusElement.textContent = "Online";
+						statusElement.style.color = "green";
+					}
+				}
+			}
+
+			// Initial check
+			updateStatus();
+
+			// Listen for changes in network status
+			window.addEventListener("online", updateStatus);
+			window.addEventListener("offline", updateStatus);
+			if (navigator.connection) {
+				navigator.connection.addEventListener("change", updateStatus);
+			}
 		</script>
 	</body>
 </html>
