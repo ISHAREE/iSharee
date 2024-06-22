@@ -31,12 +31,6 @@
 			src="https://kit.fontawesome.com/14e8377c36.js"
 			crossorigin="anonymous"></script>
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-		<!-- <script>
-			window.addEventListener("beforeunload", function (event) {
-				// Make an AJAX request to the logout endpoint
-				navigator.sendBeacon("/logout");
-			});
-		</script> -->
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
 
@@ -105,7 +99,7 @@
 
 	<body>
 		<div class="app-container">
-			<!-- #####################---- left side menu bar----############################> -->
+			<!-- #############---- left side menu bar----#############> -->
 			<div class="app-left" id="app-left-menu">
 				<div class="app-left-contents">
 					<span class="close-menu">
@@ -402,7 +396,9 @@
 										<section class="content-section">
 											<div class="access-links active">
 												<div class="access-link-wrapper">
-													<div class="access-icon" data-target="photos">
+													<div
+														class="access-icon nav-list-link"
+														data-target="photos">
 														<svg
 															xmlns="http://www.w3.org/2000/svg"
 															width="56"
@@ -430,7 +426,9 @@
 													>
 												</div>
 												<div class="access-link-wrapper">
-													<div class="access-icon" data-target="audios">
+													<div
+														class="access-icon nav-list-link"
+														data-target="audios">
 														<svg
 															xmlns="http://www.w3.org/2000/svg"
 															width="56"
@@ -452,7 +450,9 @@
 													>
 												</div>
 												<div class="access-link-wrapper">
-													<div class="access-icon" data-target="videos">
+													<div
+														class="access-icon nav-list-link"
+														data-target="videos">
 														<svg
 															xmlns="http://www.w3.org/2000/svg"
 															width="56"
@@ -473,7 +473,9 @@
 												</div>
 
 												<div class="access-link-wrapper">
-													<div class="access-icon" data-target="document">
+													<div
+														class="access-icon nav-list-link"
+														data-target="document">
 														<svg
 															xmlns="http://www.w3.org/2000/svg"
 															width="56"
@@ -498,7 +500,9 @@
 													>
 												</div>
 												<div class="access-link-wrapper">
-													<div class="access-icon" data-target="files">
+													<div
+														class="access-icon nav-list-link"
+														data-target="files">
 														<svg
 															xmlns="http://www.w3.org/2000/svg"
 															width="56"
@@ -520,13 +524,33 @@
 													>
 												</div>
 												<div class="access-link-wrapper">
-													<div class="access-icon" data-target="upload">
-														<svg
+													<div
+														class="access-icon nav-list-link"
+														data-target="upload">
+														<svg class="nav-list-link"
+															viewBox="0 0 24 24"
 															xmlns="http://www.w3.org/2000/svg"
-															viewBox="0 -960 960 960"
-															fill="#EA3323">
+															id="Upload-Thick-Bottom--Streamline-Ultimate"
+															
+															width="24">
+															<desc>
+																Upload Thick Bottom Streamline Icon:
+																https://streamlinehq.com
+															</desc>
 															<path
-																d="M200-120v-33.85h560V-120H200Zm185.38-150.77v-271.54H254.46L480-840l224.62 297.69H573.85v271.54H385.38Zm33.85-33.85H540V-582.1h90.56L480-784.67 328.67-582.1h90.56v277.48ZM480-582.1Z" />
+																d="M18.5 7.5c0.275 0 0.341 -0.159 0.146 -0.354L12.354 0.854a0.5 0.5 0 0 0 -0.708 0L5.354 7.147c-0.2 0.195 -0.129 0.354 0.146 0.354h3v10a1 1 0 0 0 1 1h5a1 1 0 0 0 1 -1V7.5Z"
+																fill="none"
+																stroke="#ff0000"
+																stroke-linecap="round"
+																stroke-linejoin="round"
+																stroke-width="1"></path>
+															<path
+																d="M23.5 18.5v4a1 1 0 0 1 -1 1h-21a1 1 0 0 1 -1 -1v-4"
+																fill="none"
+																stroke="#ff0000"
+																stroke-linecap="round"
+																stroke-linejoin="round"
+																stroke-width="1"></path>
 														</svg>
 													</div>
 													<span class="access-text" data-target="upload"

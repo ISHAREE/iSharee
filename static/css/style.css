@@ -1158,7 +1158,6 @@ button:active {
 	height: 100%;
 	border-radius: 12px;
 	padding: 20px;
-	color: #ec0c0c;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -1166,6 +1165,8 @@ button:active {
 .access-icon svg {
 	width: 36px;
 	height: 36px;
+	fill: none;
+	color: #ff0000;
 }
 
 .access-link-wrapper {

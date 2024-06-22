@@ -458,7 +458,7 @@ document
 			});
 	});
 
-
+//Notification section navigation
 document.addEventListener("DOMContentLoaded", function () {
 	// Get all section links
 	const sectionLinks = document.querySelectorAll(".nav-lnks a");
@@ -483,7 +483,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			const targetSection = document.getElementById(targetId);
 			if (targetSection) {
 				targetSection.classList.add("active");
-				this.parentElement.classList.add("active"); // Add active class to clicked link
+				this.parentElement.classList.add("active");
 			}
 		});
 	});
@@ -513,7 +513,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			const targetSection = document.getElementById(targetId);
 			if (targetSection) {
 				targetSection.classList.add("active");
-				link.parentElement.classList.add("active"); // Add active class to clicked link
+				link.parentElement.classList.add("active");
 
 				// Update the URL in the address bar only for the clicked link
 				const fullPath = `/main/settings/${targetId}`;
@@ -534,7 +534,6 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 });
 
-/** @format */
 
 // Function to check if an element is a descendant of another element
 const isDescendant = (parent, child) => {
