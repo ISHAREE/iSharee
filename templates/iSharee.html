@@ -1520,6 +1520,9 @@
 									</button>
 								</div>
 							</div>
+
+							<h1>Online Users</h1>
+							<ul id="online-users"></ul>
 						</div>
 					</div>
 
@@ -2177,6 +2180,30 @@
 						console.error("Error:", error);
 					});
 			}
+		</script>
+		<script>
+			function fetchOnlineStatus() {
+				fetch("/users/online_status")
+					.then((response) => response.json())
+					.then((data) => {
+						const onlineUsersList = document.getElementById("online-users");
+						onlineUsersList.innerHTML = "";
+
+						data.online_users.forEach((user) => {
+							const listItem = document.createElement("li");
+							listItem.textContent = user;
+							onlineUsersList.appendChild(listItem);
+						});
+					})
+					.catch((error) =>
+						console.error("Error fetching online status:", error)
+					);
+			}
+
+			// Fetch online status every 60 seconds
+			setInterval(fetchOnlineStatus, 60000);
+			// Initial fetch
+			window.onload = fetchOnlineStatus;
 		</script>
 	</body>
 </html>

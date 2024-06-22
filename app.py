@@ -168,9 +168,19 @@ create_tables()
 
 @app.before_request
 def require_login():
-    allowed_routes = ['login', 'register', 'verification_code', 'verify_email','email_verification']
+    allowed_routes = ['login', 'register', 'verification_code', 'verify_email', 'email_verification']
     if request.endpoint not in allowed_routes and 'username' not in session and not request.path.startswith('/static'):
         return redirect(url_for('login'))
+
+@app.before_request
+def update_last_activity():
+    session_id = request.cookies.get('session_id')
+    if session_id:
+        conn = get_db_connection()
+        with conn.cursor() as cursor:
+            cursor.execute('UPDATE user_sessions SET last_activity = %s WHERE session_id = %s', (datetime.utcnow(), session_id))
+            conn.commit()
+        conn.close()
 
 def login_required(f):
     @wraps(f)
@@ -236,6 +246,41 @@ def can_send_new_browser_sign_in_notification(user_id):
     result = cursor.fetchone()
     conn.close()
     return result and result[0]
+
+def get_file_size(file_id, files_table_name):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute(f"SELECT content FROM {files_table_name} WHERE id = %s", (file_id,))
+        file_content = cursor.fetchone()[0]
+        file_size = len(file_content) if file_content else 0
+        return file_size
+    except Exception as e:
+        print(f"Error fetching file size: {e}")
+        return None
+    finally:
+        cursor.close()
+        conn.close()
+
+def get_file_description(file_id, files_table_name):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute(f"SELECT filename FROM {files_table_name} WHERE id = %s", (file_id,))
+        filename = cursor.fetchone()[0]
+        return filename
+    except Exception as e:
+        print(f"Error fetching file description: {e}")
+        return None
+    finally:
+        cursor.close()
+        conn.close()
+
+def format_file_size(size):
+    for unit in ['bytes', 'KB', 'MB', 'GB', 'TB']:
+        if size < 1024:
+            return f"{size:.2f} {unit}"
+        size /= 1024
 
 # End of Helper Functions
 
@@ -571,6 +616,23 @@ def generate_random_id(length=8):
     random_id = ''.join(secrets.choice(characters) for _ in range(length))
     return random_id
 random_id = generate_random_id()
+
+@app.route('/users/online_status', methods=['GET'])
+def online_status():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('SELECT username, last_activity FROM users_Data u JOIN user_sessions s ON u.user_id = s.user_id')
+    users = cursor.fetchall()
+    conn.close()
+
+    online_users = []
+    for user in users:
+        last_activity = user[1]
+        time_difference = datetime.utcnow() - last_activity
+        if time_difference < timedelta(minutes=5):  # Consider users active within the last 5 minutes as online
+            online_users.append(user[0])
+
+    return jsonify({'online_users': online_users})
 
 # Login route
 @app.route('/login', methods=['GET', 'POST'])
@@ -1403,8 +1465,6 @@ def save_image():
         print(e)
         return jsonify({"error": "Internal server error occurred."}), 500
 
-
-
 #######---------function to handle file----------#######
 @app.route('/files/<int:file_id>')
 def get_file(file_id):
@@ -1722,61 +1782,6 @@ def access_shared_file(token):
 
     return jsonify({"error": "Files not found"}), 404
 
-def get_file_size(file_id, files_table_name):
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    try:
-        cursor.execute(f"SELECT content FROM {files_table_name} WHERE id = %s", (file_id,))
-        file_content = cursor.fetchone()[0]
-        file_size = len(file_content) if file_content else 0
-        return file_size
-    except Exception as e:
-        print(f"Error fetching file size: {e}")
-        return None
-    finally:
-        cursor.close()
-        conn.close()
-
-def get_file_description(file_id, files_table_name):
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    try:
-        cursor.execute(f"SELECT filename FROM {files_table_name} WHERE id = %s", (file_id,))
-        filename = cursor.fetchone()[0]
-        return filename
-    except Exception as e:
-        print(f"Error fetching file description: {e}")
-        return None
-    finally:
-        cursor.close()
-        conn.close()
-
-def format_file_size(size):
-    for unit in ['bytes', 'KB', 'MB', 'GB', 'TB']:
-        if size < 1024:
-            return f"{size:.2f} {unit}"
-        size /= 1024
-
-####-----route definitions-----#######
-# @app.route('/main')
-# @app.route('/main/<path:path>')
-# def main(path=None):
-#     if 'username' in session:
-#         username = session['username']
-#         user_data = get_user_by_username(username)
-#         if user_data:
-#             email = user_data['email']
-#             profile_picture = user_data['profile_picture']
-#             if profile_picture:
-#                 profile_picture = base64.b64encode(profile_picture).decode('utf-8')
-#             return render_template('iSharee.html', username=username, email=email, profile_picture=profile_picture)
-#         else:
-#             flash('User not found.', 'login_error')
-#             return redirect(url_for('login'))
-#     else:
-#         flash('You must be logged in to access this page.', 'error')
-#         return redirect(url_for('login'))
-
 @app.route('/main')
 @app.route('/main/<path:path>')
 @login_required
@@ -1795,7 +1800,7 @@ def main(path=None):
 
             if user_data:
                 email = user_data[2]
-                profile_picture = user_data[-1]  # Assuming profile_picture is the last column
+                profile_picture = user_data[-1]
                 if profile_picture:
                     profile_picture = base64.b64encode(profile_picture).decode('utf-8')
                 return render_template('iSharee.html', username=user_data[1], email=email, profile_picture=profile_picture)
@@ -1806,10 +1811,8 @@ def main(path=None):
             flash('Invalid session.', 'login_error')
             return redirect(url_for('login'))
 
-
 @app.route('/')
 def index():
-    print(session)
     return redirect(url_for('login'))
 
 @app.route('/email_verified', methods=['GET'])
@@ -1829,101 +1832,6 @@ def verification_code():
 @app.route('/success', methods=['GET'])
 def success():
     return render_template('message.html')
-
-# @app.route('/logout')
-# def logout():
-#     # Clear the session data
-#     session.pop('username', None)
-#     session.pop('session', None)
-#     flash('You have been logged out.', 'login_error')
-#     return redirect(url_for('login'))
-
-# @app.route('/logout')
-# def logout():
-#     # Clear cookies related to session
-#     session.pop('username', None)
-#     response = make_response(redirect(url_for('login')))
-#     response.set_cookie('is_logged_in', '', expires=0)
-#     
-#     flash('You have been logged out.', 'success')
-#     return response
-
-# @app.route('/logout')
-# def logout():
-#     session_id = request.cookies.get('session_id', 'session')
-#     session.pop('session', None)
-#     response = make_response(redirect(url_for('login')))
-
-#     if session_id:
-#         conn = get_db_connection()
-#         with conn.cursor() as cursor:
-#             cursor.execute('''DELETE FROM user_sessions WHERE session_id = %s''', (session_id,))
-#             conn.commit()
-#         conn.close()
-    
-#     response = make_response(redirect(url_for('login')))
-#     # Clear the session_id cookie by setting its expiry in the past
-#     session.pop('session', None)
-#     response.set_cookie('session', '', expires=0)
-#     response.set_cookie('session_id', '', expires=0, path='/', domain=None, secure=None, httponly=False)
-#     flash('You have been logged out.', 'success')
-#     return response
-
-# @app.route('/logout', methods=['GET', 'POST'])
-# def logout():
-#     if request.method == 'POST':
-#         # Retrieve session_id from cookies
-#         session_id = request.cookies.get('session_id', 'session')
-#         session.pop('session', None)
-#         session.pop('session_id, None')
-#         response = make_response(redirect(url_for('login')))
-
-#         response.set_cookie('session', '', max_age=0)
-
-#         # Clear session data
-#         session.clear()
-
-#         # Delete session from database
-#         if session_id:
-#             conn = get_db_connection()
-#             with conn.cursor() as cursor:
-#                 cursor.execute('''DELETE FROM user_sessions WHERE session_id = %s''', (session_id,))
-#                 conn.commit()
-#             conn.close()
-
-#         # Redirect to login page
-#         flash('You have been logged out.', 'success')
-#         return redirect(url_for('login'))
-#     else:
-#         return redirect(url_for('login'))
-
-# function to clear and remove session_id when logout is called
-
-
-
-
-# @app.route('/logout', methods=['GET', 'POST'])
-# def logout():
-#     if request.method == 'POST':
-
-#         session_id = request.cookies.get('session_id')
-
-
-#         session.clear()
-#         session.pop('session', None)
-
-#         if session_id:
-#             conn = get_db_connection()
-#             with conn.cursor() as cursor:
-#                 cursor.execute('''DELETE FROM user_sessions WHERE session_id = %s''', (session_id,))
-#                 conn.commit()
-#             conn.close()
-
-#         flash('You have been logged out.', 'success')
-#         return redirect(url_for('login'))
-#     else:
-#         return redirect(url_for('login'))
-
 
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
@@ -1949,8 +1857,6 @@ def del_session_id(session_id):
             conn.commit()
     finally:
         conn.close()
-
-
 
 if __name__ == '__main__':
     app.run(debug=True)
