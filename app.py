@@ -19,7 +19,7 @@ import re
 import requests
 from functools import wraps
 from user_agents import parse
-from flask_socketio import SocketIO, emit, join_room, leave_room
+# from flask_socketio import SocketIO, emit, join_room, leave_room
 from werkzeug.utils import secure_filename
 from psycopg2.extensions import AsIs
 from datetime import timedelta
@@ -33,7 +33,7 @@ import smtplib
 from email.mime.text import MIMEText
 
 app = Flask(__name__)
-socketio = SocketIO(app)
+# socketio = SocketIO(app)
 # socketio = SocketIO(app, cors_allowed_origins="*")
 
 app.secret_key = os.urandom(24)
@@ -651,28 +651,7 @@ def online_status():
         if time_difference < timedelta(minutes=5):  # Consider users active within the last 5 minutes as online
             online_users.append(user[0])
 
-    current_user = session.get('username')  # Assuming the current user's username is stored in the session
-    return jsonify({'online_users': online_users, 'current_user': current_user})
-
-@socketio.on('connect')
-def handle_connect():
-    emit_online_status()
-
-def emit_online_status():
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute('SELECT username, last_activity FROM users_Data u JOIN user_sessions s ON u.user_id = s.user_id')
-    users = cursor.fetchall()
-    conn.close()
-
-    online_users = []
-    for user in users:
-        last_activity = user[1]
-        time_difference = datetime.utcnow() - last_activity
-        if time_difference < timedelta(minutes=5):  # Consider users active within the last 5 minutes as online
-            online_users.append(user[0])
-
-    socketio.emit('online_status_update', {'online_users': online_users})
+    return jsonify({'online_users': online_users})
 
 # Login route
 @app.route('/login', methods=['GET', 'POST'])
