@@ -1,0 +1,241 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Sign Up - iSharee</title>
+		<link
+			rel="shortcut icon"
+			href="/static/assets/images/favicon.ico"
+			type="image/x-icon" />
+		<link rel="stylesheet" href="/static/css/auth.css" />
+		<link
+			href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+			rel="stylesheet" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" />
+	</head>
+	<body>
+		<div class="container">
+			<div class="left-wrp">
+				<h2>Signup</h2>
+				<div class="lft-group-cn">
+					<p>
+						Hello there, Welcome back <br />
+						Create an account to get started.
+					</p>
+					<img src="" alt="" />
+
+					<div class="left-center-cn">
+						<ul class="LeftSide_featuresList">
+							<li>
+								<div class="LeftSide_checkIconContainer">
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										viewBox="0 0 16 16"
+										width="1em"
+										height="1em"
+										fill="currentColor"
+										class="LeftSide_checkIcon__1WQ4A">
+										<path
+											d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
+									</svg>
+								</div>
+								Seamless file sharing
+							</li>
+							<li>
+								<div class="LeftSide_checkIconContainer">
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										viewBox="0 0 16 16"
+										width="1em"
+										height="1em"
+										fill="currentColor"
+										class="LeftSide_checkIcon__1WQ4A">
+										<path
+											d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
+									</svg>
+								</div>
+								Free to use
+							</li>
+							<li>
+								<div class="LeftSide_checkIconContainer">
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										viewBox="0 0 16 16"
+										width="1em"
+										height="1em"
+										fill="currentColor"
+										class="LeftSide_checkIcon__1WQ4A">
+										<path
+											d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
+									</svg>
+								</div>
+								Secure file sharing
+							</li>
+						</ul>
+
+						<div class="img-container">
+							<img src="/static/assets/images/images.png" alt="" />
+						</div>
+					</div>
+				</div>
+				<div class="left-bottom-cn">
+					<div class="btn-l">
+						<span>Already have an Account?</span>
+						<a href="/login">Login</a>
+					</div>
+				</div>
+			</div>
+			<div class="right-wrp">
+				<div class="logo">
+					<img src="/static/assets/images/logo.png" alt="" />
+				</div>
+				<h2>Sign Up</h2>
+				<hr />
+				<form action="/register" method="post">
+					<div class="form-group">
+						<input
+							type="text"
+							class="form-control"
+							id="username"
+							name="username"
+							placeholder=""
+							required
+							autocomplete="off" />
+						<label for="username" class="grp-lbl">Username</label>
+					</div>
+					<div class="form-group">
+						<input
+							type="email"
+							class="form-control"
+							id="email"
+							name="email"
+							placeholder=""
+							required
+							autocomplete="email" />
+						<label for="email" class="grp-lbl">Email</label>
+					</div>
+					<div class="form-group">
+						<input
+							type="password"
+							class="form-control"
+							id="password"
+							name="password"
+							placeholder=""
+							required
+							autocomplete="new-password" />
+						<label for="password" class="grp-lbl">Password</label>
+						<i class="bx bxs-hide password-toggle"></i>
+					</div>
+
+					<div class="indicator">
+						<div class="icon-text">
+							<i class="fas fa-exclamation-circle error_icon"></i>
+							<h6 class="text"></h6>
+						</div>
+					</div>
+
+					<button type="submit" class="btn btn-primary">Submit</button>
+					<p>
+						By signing up you agree to our <a href="#">Terms of Service</a> and
+						<a href="#">Privacy Policy</a>
+					</p>
+
+					<div class="btn-l-2">
+						<span>Already have an Account?</span>
+						<a href="/login">login</a>
+					</div>
+				</form>
+
+				<div class="message-container">
+					{% with messages = get_flashed_messages(with_categories=true) %} {% if
+					messages %}
+					<ul id="flash-messages">
+						{% for category, message in messages %} {% if category ==
+						'register_error' or category == 'register_success' %}
+						<li>{{ message }}</li>
+						{% endif %} {% endfor %}
+					</ul>
+					{% endif %} {% endwith %}
+				</div>
+
+				<footer>
+					<div class="footer-bottom">
+						<p>&copy; 2024 iSharee. All rights reserved.</p>
+					</div>
+				</footer>
+			</div>
+		</div>
+
+		<script>
+			// Password strength indicator
+			let alphabet = /[a-zA-Z]/,
+				numbers = /[0-9]/,
+				scharacters = /[!,@,#,$,%,^,&,*,?,_,(,),-,+,=,~]/;
+
+			let input = document.getElementById("password");
+			let indicator = document.querySelector(".indicator");
+			let text = document.querySelector(".text");
+			// let showHide = document.getElementById("togglePassSignup");
+			let iconText = document.querySelector(".icon-text");
+
+			input.addEventListener("keyup", () => {
+				indicator.classList.add("active");
+				let val = input.value;
+				if (
+					val.match(alphabet) ||
+					val.match(numbers) ||
+					val.match(scharacters)
+				) {
+					text.textContent = "Your Password is Weak \u{1F614}";
+					input.style.borderColor = "#FF6333";
+					// showHide.style.color = "#FF6333";
+					iconText.style.color = "#FF6333";
+				}
+				if (val.match(alphabet) && val.match(numbers) && val.length >= 6) {
+					text.textContent = "Medium Password";
+					input.style.borderColor = "#cc8500";
+					// showHide.style.color = "#cc8500";
+					iconText.style.color = "#cc8500";
+				}
+				if (
+					val.match(alphabet) &&
+					val.match(numbers) &&
+					val.match(scharacters) &&
+					val.length >= 8
+				) {
+					text.textContent = "Password is strong";
+					input.style.borderColor = "#22C32A";
+					// showHide.style.color = "#22C32A";
+					iconText.style.color = "#22C32A";
+				}
+				if (val == "") {
+					indicator.classList.remove("active");
+					input.style.borderColor = "#A6A6A6";
+					// showHide.style.color = "#A6A6A6";
+					iconText.style.color = "#A6A6A6";
+				}
+			});
+		</script>
+		<script>
+			document.addEventListener("DOMContentLoaded", () => {
+				const togglePassword = document.querySelector(".password-toggle");
+				const passwordInput = document.querySelector('input[name="password"]');
+
+				togglePassword.addEventListener("click", () => {
+					const type =
+						passwordInput.getAttribute("type") === "password"
+							? "text"
+							: "password";
+					passwordInput.setAttribute("type", type);
+					togglePassword.classList.toggle("bxs-hide");
+					togglePassword.classList.toggle("bxs-show");
+				});
+			});
+		</script>
+	</body>
+</html>

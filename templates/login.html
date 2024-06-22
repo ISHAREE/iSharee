@@ -1,0 +1,217 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Log in - iSharee</title>
+		<link
+			rel="shortcut icon"
+			href="/static/assets/images/favicon.ico"
+			type="image/x-icon" />
+		<link rel="stylesheet" href="/static/css/auth.css" />
+		<link
+			href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+			rel="stylesheet" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" />
+		<script>
+			// Broadcast that you're opening a page.
+			localStorage.openpages = Date.now();
+			window.addEventListener(
+				"storage",
+				function (e) {
+					if (e.key == "openpages") {
+						// Listen if anybody else is opening the same page!
+						localStorage.page_available = Date.now();
+					}
+					if (e.key == "page_available") {
+						alert("One more page already open");
+					}
+				},
+				false
+			);
+		</script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="left-wrp">
+				<h2>Log In.</h2>
+				<div class="lft-group-cn">
+					<p>
+						Hello there, Welcome back <br />
+						Create an account to get started.
+					</p>
+
+					<div class="left-center-cn">
+						<ul class="LeftSide_featuresList">
+							<li>
+								<div class="LeftSide_checkIconContainer">
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										viewBox="0 0 16 16"
+										width="1em"
+										height="1em"
+										fill="currentColor"
+										class="LeftSide_checkIcon__1WQ4A">
+										<path
+											d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
+									</svg>
+								</div>
+								Seamless file sharing
+							</li>
+							<li>
+								<div class="LeftSide_checkIconContainer">
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										viewBox="0 0 16 16"
+										width="1em"
+										height="1em"
+										fill="currentColor"
+										class="LeftSide_checkIcon__1WQ4A">
+										<path
+											d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
+									</svg>
+								</div>
+								Free to use
+							</li>
+							<li>
+								<div class="LeftSide_checkIconContainer">
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										viewBox="0 0 16 16"
+										width="1em"
+										height="1em"
+										fill="currentColor"
+										class="LeftSide_checkIcon__1WQ4A">
+										<path
+											d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
+									</svg>
+								</div>
+								Secure file sharing
+							</li>
+						</ul>
+						<div class="img-container">
+							<img src="/static/assets/images/images.png" />
+						</div>
+					</div>
+				</div>
+				<div class="left-bottom-cn">
+					<div class="btn-l">
+						<span>Already have an Account?</span>
+						<a href="/register">Signup</a>
+					</div>
+				</div>
+			</div>
+			<div class="right-wrp">
+				<div class="logo">
+					<img src="/static/assets/images/logo.png" alt="" />
+				</div>
+				<h2>Log In</h2>
+				<hr />
+				<form action="/login" method="post">
+					<div class="form-group">
+						<input
+							type="text"
+							class="form-control"
+							id="username"
+							name="username"
+							placeholder=""
+							required />
+						<label for="username" class="grp-lbl">Username</label>
+					</div>
+					<div class="form-group">
+						<input
+							type="password"
+							class="form-control"
+							id="password"
+							name="password"
+							placeholder=""
+							required />
+						<label for="password" class="grp-lbl">Password</label>
+						<i class="bx bxs-hide password-toggle"></i>
+					</div>
+
+					<div class="indicator">
+						<div class="icon-text">
+							<i class="fas fa-exclamation-circle error_icon"></i>
+							<h6 class="text"></h6>
+						</div>
+					</div>
+
+					<div class="nv-grp">
+						<div class="nv-grp-cn">
+							<input type="checkbox" name="remember" id="remember" />
+							<label for="remember">Remember me</label>
+						</div>
+						<a href="/forgot_password">Forgot Password?</a>
+					</div>
+
+					<button type="submit" class="btn btn-primary-l" id="btn-primary-l">
+						Let me in
+					</button>
+
+					<div class="btn-l-2">
+						<span>Don't have an account? </span>
+						<a href="/register">signup</a>
+					</div>
+				</form>
+
+				<div class="message-container" style="display: block">
+					{% with messages = get_flashed_messages(with_categories=true) %} {% if
+					messages %}
+					<ul id="flash-messages">
+						{% for category, message in messages %} {% if category ==
+						'login_error' or category == 'login_success' %}
+						<li>{{ message }}</li>
+						{% endif %} {% endfor %}
+					</ul>
+					{% endif %} {% endwith %} {% if remaining_time %}
+					<p>
+						You have reached the maximum number of login attempts. Please try
+						again after
+						<span id="countdown">{{ remaining_time }} seconds</span>.
+					</p>
+					{% endif %}
+				</div>
+
+				<footer>
+					<div class="footer-bottom">
+						<p>&copy; 2024 iSharee. All rights reserved.</p>
+					</div>
+				</footer>
+			</div>
+		</div>
+
+		<script>
+			document.addEventListener("DOMContentLoaded", (event) => {
+				var flashMessages = document.getElementById("flash-messages");
+
+				if (flashMessages) {
+					setTimeout(() => {
+						flashMessages.style.display = "none";
+					}, 5000);
+				}
+			});
+		</script>
+
+		<script>
+			document.addEventListener("DOMContentLoaded", () => {
+				const togglePassword = document.querySelector(".password-toggle");
+				const passwordInput = document.querySelector('input[name="password"]');
+
+				togglePassword.addEventListener("click", () => {
+					const type =
+						passwordInput.getAttribute("type") === "password"
+							? "text"
+							: "password";
+					passwordInput.setAttribute("type", type);
+					togglePassword.classList.toggle("bxs-hide");
+					togglePassword.classList.toggle("bxs-show");
+				});
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,108 @@
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    padding: 20px 0;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5em;
+    color: #3498db;
+}
+
+header p {
+    font-size: 1.2em;
+    color: #555;
+}
+
+main {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+section {
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #3498db;
+}
+
+ul, ol {
+    margin: 0;
+    padding-left: 20px;
+}
+
+ul li, ol li {
+    margin-bottom: 10px;
+}
+
+.cta {
+    text-align: center;
+}
+
+.buttons {
+    margin-top: 20px;
+}
+
+.button {
+    display: inline-block;
+    margin: 5px;
+    padding: 10px 20px;
+    background: #3498db;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.button:hover {
+    background: #2980b9;
+}
+
+footer {
+    text-align: center;
+    padding: 20px 0;
+    background: #3498db;
+    color: #fff;
+    margin-top: 20px;
+    border-radius: 5px 5px 0 0;
+}
+
+footer nav a {
+    color: #fff;
+    margin: 0 10px;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+footer nav a:hover {
+    color: #ddd;
+}
+
+footer .social-media a {
+    color: #fff;
+    margin: 0 5px;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+footer .social-media a:hover {
+    color: #ddd;
+}

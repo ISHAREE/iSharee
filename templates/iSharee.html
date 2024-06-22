@@ -1,0 +1,2160 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>iSharee</title>
+		<link
+			rel="shortcut icon"
+			href="/static/assets/images/favicon.ico"
+			type="image/x-icon" />
+		<link rel="stylesheet" href="/static/css/style.css" />
+		<link
+			href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+			rel="stylesheet" />
+		<link
+			href="https://fonts.googleapis.com/icon?family=Material+Icons"
+			rel="stylesheet" />
+		<link
+			href="https://unpkg.com/video.js@7/dist/video-js.min.css"
+			rel="stylesheet" />
+		<link
+			rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+		<script
+			src="https://kit.fontawesome.com/14e8377c36.js"
+			crossorigin="anonymous"></script>
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script>
+			window.addEventListener("beforeunload", function (event) {
+				// Make an AJAX request to the logout endpoint
+				navigator.sendBeacon("/logout");
+			});
+		</script>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+
+		<link
+			href="https://unpkg.com/cropperjs/dist/cropper.css"
+			rel="stylesheet" />
+		<script src="https://unpkg.com/cropperjs/dist/cropper.js"></script>
+		<!-- <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script> -->
+		<style>
+			.container {
+				--uib-size: 40px;
+				--uib-color: rgb(238, 42, 42);
+				--uib-speed: 1.1s;
+				--uib-stroke: 5px;
+				--mask-size: calc(var(--uib-size) / 2 - var(--uib-stroke));
+				position: relative;
+				display: flex;
+				align-items: center;
+				justify-content: flex-start;
+				height: var(--uib-size);
+				width: var(--uib-size);
+				-webkit-mask: radial-gradient(
+					circle var(--mask-size),
+					transparent 99%,
+					#09e780 100%
+				);
+				mask: radial-gradient(
+					circle var(--mask-size),
+					transparent 99%,
+					#02f854 100%
+				);
+				background-image: conic-gradient(transparent 25%, var(--uib-color));
+				animation: spin calc(var(--uib-speed)) linear infinite;
+				border-radius: 50%;
+			}
+
+			@keyframes spin {
+				0% {
+					transform: rotate(0deg);
+				}
+
+				100% {
+					transform: rotate(360deg);
+				}
+			}
+
+			.dashboard,
+			.videos,
+			.audios,
+			.document,
+			.files,
+			.photos,
+			.upload {
+				height: 100%;
+			}
+
+			.section {
+				display: none;
+			}
+
+			.section.active {
+				display: block;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="app-container">
+			<!-- #####################---- left side menu bar----############################> -->
+			<div class="app-left" id="app-left-menu">
+				<div class="app-left-contents">
+					<span class="close-menu">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="24"
+							height="24"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							class="feather feather-x">
+							<line x1="18" y1="6" x2="6" y2="18" />
+							<line x1="6" y1="6" x2="18" y2="18" />
+						</svg>
+					</span>
+					<div class="app-logo">
+						<img src="/static/assets/images/logo.png" alt="logo" />
+						<span>iShare </span>
+					</div>
+					<ul class="nav-list" id="nav-list">
+						<li
+							class="nav-list-item"
+							id="nav-list-link active"
+							data-target="dashboard">
+							<a
+								id="home-link"
+								class="nav-list-link"
+								href="/main/dashboard"
+								data-target="dashboard"
+								data-container="dashboard">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 -960 960 960"
+									fill="#EA3323">
+									<path
+										d="M513.33-580v-260H840v260H513.33ZM120-446.67V-840h326.67v393.33H120ZM513.33-120v-393.33H840V-120H513.33ZM120-120v-260h326.67v260H120Zm66.67-393.33H380v-260H186.67v260ZM580-186.67h193.33v-260H580v260Zm0-460h193.33v-126.66H580v126.66Zm-393.33 460H380v-126.66H186.67v126.66ZM380-513.33Zm200-133.34Zm0 200ZM380-313.33Z" />
+								</svg>
+								Dashboard
+							</a>
+						</li>
+						<li class="nav-list-item" data-target="files">
+							<a
+								id="files-link"
+								class="nav-list-link"
+								href="/main/files"
+								data-target="files"
+								data-container="files">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 -960 960 960"
+									fill="#EA3323">
+									<path
+										d="M319.33-246.67h321.34v-66.66H319.33v66.66Zm0-166.66h321.34V-480H319.33v66.67ZM226.67-80q-27 0-46.84-19.83Q160-119.67 160-146.67v-666.66q0-27 19.83-46.84Q199.67-880 226.67-880H574l226 226v507.33q0 27-19.83 46.84Q760.33-80 733.33-80H226.67Zm314-542.67v-190.66h-314v666.66h506.66v-476H540.67Zm-314-190.66v190.66-190.66 666.66-666.66Z" />
+								</svg>
+								Files
+							</a>
+						</li>
+						<li class="nav-list-item" data-target="document">
+							<a
+								id="documents-link"
+								class="nav-list-link"
+								href="/main/documents"
+								data-target="document"
+								data-container="document">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 -960 960 960"
+									fill="#EA3323">
+									<path
+										d="M319.33-246.67h321.34v-66.66H319.33v66.66Zm0-166.66h321.34V-480H319.33v66.67ZM226.67-80q-27 0-46.84-19.83Q160-119.67 160-146.67v-666.66q0-27 19.83-46.84Q199.67-880 226.67-880H574l226 226v507.33q0 27-19.83 46.84Q760.33-80 733.33-80H226.67Zm314-542.67v-190.66h-314v666.66h506.66v-476H540.67Zm-314-190.66v190.66-190.66 666.66-666.66Z" />
+								</svg>
+								Documents
+							</a>
+						</li>
+						<li class="nav-list-item" data-target="videos">
+							<a
+								id="videos-link"
+								class="nav-list-link"
+								href="/main/videos"
+								data-target="videos"
+								data-container="videos">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 -960 960 960"
+									fill="#EA3323">
+									<path
+										d="M146.67-160q-27 0-46.84-19.83Q80-199.67 80-226.67v-506.66q0-27 19.83-46.84Q119.67-800 146.67-800h506.66q27 0 46.84 19.83Q720-760.33 720-733.33V-530l160-160v420L720-430v203.33q0 27-19.83 46.84Q680.33-160 653.33-160H146.67Zm0-66.67h506.66v-506.66H146.67v506.66Zm0 0v-506.66 506.66Z" />
+								</svg>
+								Videos
+							</a>
+						</li>
+						<li class="nav-list-item" data-target="audios">
+							<a
+								id="audios-link"
+								class="nav-list-link"
+								href="/main/audio_files"
+								data-target="audios"
+								data-container="audios">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 -960 960 960"
+									fill="#EA3323">
+									<path
+										d="M395.33-120q-64 0-108.66-44.67Q242-209.33 242-273.33T286.67-382q44.66-44.67 108.66-44.67 26.34 0 47.84 7.17 21.5 7.17 38.83 20.17V-840h236v143.33H548.67v423.34q0 64-44.67 108.66Q459.33-120 395.33-120Z" />
+								</svg>
+								Audio
+							</a>
+						</li>
+						<li class="nav-list-item" data-target="photos">
+							<a
+								id="photos-link"
+								class="nav-list-link"
+								href="/main/photos"
+								data-target="photos"
+								data-container="photos">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 -960 960 960"
+									fill="#EA3323">
+									<path
+										d="M186.67-120q-27 0-46.84-19.83Q120-159.67 120-186.67v-586.66q0-27 19.83-46.84Q159.67-840 186.67-840h586.66q27 0 46.84 19.83Q840-800.33 840-773.33v586.66q0 27-19.83 46.84Q800.33-120 773.33-120H186.67Zm0-66.67h586.66v-586.66H186.67v586.66ZM237.33-278h486l-148-197.33-128 167.33-92-124.67-118 154.67Zm-50.66 91.33v-586.66 586.66Z" />
+								</svg>
+								Photos
+							</a>
+						</li>
+						<li class="nav-list-item" data-target="deletedfiles">
+							<a
+								id="deleted-files-link"
+								class="nav-list-link"
+								href="main/deleted-files"
+								data-target="deleted-files"
+								data-container="deleted-files">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 -960 960 960"
+									fill="#EA3323">
+									<path
+										d="M253.33-160q-87.66 0-150.5-62.33Q40-284.67 40-372.33q0-78 48.67-138 48.66-60 126-73.67 21.66-95.33 96-155.33 74.33-60 170.66-60 114.34 0 192.5 81.5Q752-636.33 752-521.33v16q71 1.33 119.5 50.83T920-332.67q0 71-50.83 121.84Q818.33-160 747.33-160h-234q-27 0-46.83-19.83-19.83-19.84-19.83-46.84v-240.66l-76.67 76-47.33-47.34L480-596l157.33 157.33L590-391.33l-76.67-76v240.66h234q44 0 75-31t31-75q0-44-31-75t-75-31h-62v-82.66q0-87-59.83-149.17-59.83-62.17-146.83-62.17-87 0-147.17 62.17-60.17 62.17-60.17 149.17H252q-60.67 0-103 42.66Q106.67-436 106.67-374q0 60.67 42.95 104t103.71 43.33H380V-160H253.33ZM480-446.67Z" />
+								</svg>
+								Settings
+							</a>
+						</li>
+						<li class="nav-list-item" data-target="upload">
+							<a
+								id="upload-link"
+								class="nav-list-link"
+								href="/main/upload"
+								data-target="upload"
+								data-container="upload">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 -960 960 960"
+									fill="#EA3323">
+									<path
+										d="M253.33-160q-87.66 0-150.5-62.33Q40-284.67 40-372.33q0-78 48.67-138 48.66-60 126-73.67 21.66-95.33 96-155.33 74.33-60 170.66-60 114.34 0 192.5 81.5Q752-636.33 752-521.33v16q71 1.33 119.5 50.83T920-332.67q0 71-50.83 121.84Q818.33-160 747.33-160h-234q-27 0-46.83-19.83-19.83-19.84-19.83-46.84v-240.66l-76.67 76-47.33-47.34L480-596l157.33 157.33L590-391.33l-76.67-76v240.66h234q44 0 75-31t31-75q0-44-31-75t-75-31h-62v-82.66q0-87-59.83-149.17-59.83-62.17-146.83-62.17-87 0-147.17 62.17-60.17 62.17-60.17 149.17H252q-60.67 0-103 42.66Q106.67-436 106.67-374q0 60.67 42.95 104t103.71 43.33H380V-160H253.33ZM480-446.67Z" />
+								</svg>
+								Upload Files
+							</a>
+						</li>
+
+						<li class="nav-list-item" data-target="settings">
+							<a
+								id="settings-link"
+								class="nav-list-link"
+								href="/main/settings"
+								data-target="settings"
+								data-container="settings">
+								<!-- @format -->
+
+								<svg
+									fill="#000000"
+									version="1.1"
+									id="Layer_1"
+									xmlns="http://www.w3.org/2000/svg"
+									xmlns:xlink="http://www.w3.org/1999/xlink"
+									viewBox="0 0 491.52 491.52"
+									xml:space="preserve">
+									<g>
+										<g>
+											<path
+												d="M491.52,285.15v-78.78l-57.55-9.6c-4.49-17.3-11.375-33.86-20.525-49.41l33.95-47.53l-55.715-55.7l-47.53,33.95
+			c-15.545-9.16-32.11-16.04-49.405-20.53L285.155,0h-78.79l-9.59,57.55c-17.295,4.49-33.86,11.37-49.405,20.53L99.84,44.13
+			l-55.715,55.7l33.95,47.53c-9.15,15.55-16.035,32.11-20.525,49.41L0,206.37v78.78l57.55,9.6c4.49,17.3,11.375,33.86,20.525,49.41
+			l-33.95,47.53l55.715,55.7l47.53-33.95c15.545,9.16,32.11,16.04,49.405,20.53l9.59,57.55h78.79l9.59-57.55
+			c17.295-4.49,33.86-11.37,49.405-20.53l47.53,33.95l55.715-55.7l-33.95-47.53c9.15-15.55,16.035-32.11,20.525-49.41L491.52,285.15
+			z M415.6,283.55c-4.35,19.65-12.11,38.34-23.065,55.54l-3.715,5.83l31.825,44.55l-31.175,31.18l-44.56-31.83l-5.825,3.71
+			c-17.205,10.96-35.89,18.72-55.54,23.07l-6.75,1.5l-8.99,53.94h-44.09l-8.99-53.94l-6.75-1.5
+			c-19.65-4.35-38.335-12.11-55.54-23.07l-5.825-3.71l-44.56,31.83l-31.175-31.18l31.825-44.55l-3.715-5.83
+			C88.03,321.89,80.27,303.2,75.92,283.55l-1.495-6.75l-53.945-8.99v-44.1l53.945-8.99l1.495-6.75
+			c4.35-19.65,12.11-38.34,23.065-55.54l3.715-5.83l-31.825-44.55l31.175-31.18l44.56,31.83l5.825-3.71
+			c17.205-10.96,35.89-18.72,55.54-23.07l6.75-1.5l8.99-53.94h44.09l8.99,53.94l6.75,1.5c19.65,4.35,38.335,12.11,55.54,23.07
+			l5.825,3.71l44.56-31.83l31.175,31.18L388.82,146.6l3.715,5.83c10.955,17.2,18.715,35.89,23.065,55.54l1.495,6.75l53.945,8.99
+			v44.1l-53.945,8.99L415.6,283.55z" />
+										</g>
+									</g>
+									<g>
+										<g>
+											<path
+												d="M245.76,143.36c-56.465,0-102.4,45.94-102.4,102.4s45.935,102.4,102.4,102.4s102.4-45.94,102.4-102.4
+			S302.225,143.36,245.76,143.36z M245.76,327.68c-45.17,0-81.92-36.75-81.92-81.92s36.75-81.92,81.92-81.92
+			s81.92,36.75,81.92,81.92S290.93,327.68,245.76,327.68z" />
+										</g>
+									</g>
+								</svg>
+
+								Settings
+							</a>
+						</li>
+					</ul>
+				</div>
+
+				<div class="dark-theme-toggle">
+					<div class="menu">
+						<div class="menu-header">
+							<h2 class="menu-header-title">Theme</h2>
+							<div class="theme-switcher">
+								<input type="radio" id="light-theme" name="themes" checked />
+								<label for="light-theme" class="switcher">
+									<span> <i data-feather="sun"></i>Light </span>
+								</label>
+								<input type="radio" id="dark-theme" name="themes" />
+								<label for="dark-theme" class="switcher">
+									<span> <i data-feather="moon"></i>Dark </span>
+								</label>
+								<input type="radio" id="black-theme" name="themes" />
+								<label for="black-theme" class="switcher">
+									<span> <i data-feather="star"></i>Black </span>
+								</label>
+								<span class="slider"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- #####################---- eleft side menu bar----############################> -->
+
+			<!-- #########################----main section----############################> -->
+
+			<div class="app-main">
+				<section class="section dashboard" id="dashboard">
+					<!-- dashboard contents go in here -->
+					<section class="section content" id="dashboard">
+						<div class="h-1">
+							<h1>Dashboard</h1>
+						</div>
+						<div class="main-header-line">
+							<div class="action-buttons">
+								<button class="open-right-area" title="Show right area">
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										width="24"
+										height="24"
+										viewBox="0 0 24 24"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="2"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										class="feather feather-activity">
+										<polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+									</svg>
+								</button>
+								<button class="menu-button" title="Show menu area">
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										width="24"
+										height="24"
+										viewBox="0 0 24 24"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="2"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										class="feather feather-menu">
+										<line x1="3" y1="12" x2="21" y2="12" />
+										<line x1="3" y1="6" x2="21" y2="6" />
+										<line x1="3" y1="18" x2="21" y2="18" />
+									</svg>
+								</button>
+							</div>
+						</div>
+
+						<div class="chart-row two">
+							<div class="chart-container-wrapper big">
+								<div class="chart-container">
+									<div class="chart-container-header">
+										<h1 class="section-header">Quick Access</h1>
+									</div>
+									<div class="line-chart">
+										<section class="content-section">
+											<div class="access-links active">
+												<div class="access-link-wrapper">
+													<div class="access-icon" data-target="photos">
+														<svg
+															xmlns="http://www.w3.org/2000/svg"
+															width="56"
+															height="56"
+															viewBox="0 0 24 24"
+															fill="none"
+															stroke="currentColor"
+															stroke-width="1"
+															stroke-linecap="round"
+															stroke-linejoin="round"
+															class="feather feather-image">
+															<rect
+																x="3"
+																y="3"
+																width="18"
+																height="18"
+																rx="2"
+																ry="2" />
+															<circle cx="8.5" cy="8.5" r="1.5" />
+															<polyline points="21 15 16 10 5 21" />
+														</svg>
+													</div>
+													<span class="access-text" data-target="photos"
+														>Images</span
+													>
+												</div>
+												<div class="access-link-wrapper">
+													<div class="access-icon" data-target="audios">
+														<svg
+															xmlns="http://www.w3.org/2000/svg"
+															width="56"
+															height="56"
+															viewBox="0 0 24 24"
+															fill="none"
+															stroke="currentColor"
+															stroke-width="1"
+															stroke-linecap="round"
+															stroke-linejoin="round"
+															class="feather feather-music">
+															<path d="M9 18V5l12-2v13" />
+															<circle cx="6" cy="18" r="3" />
+															<circle cx="18" cy="16" r="3" />
+														</svg>
+													</div>
+													<span class="access-text" data-target="audios"
+														>Music</span
+													>
+												</div>
+												<div class="access-link-wrapper">
+													<div class="access-icon" data-target="videos">
+														<svg
+															xmlns="http://www.w3.org/2000/svg"
+															width="56"
+															height="56"
+															viewBox="0 0 24 24"
+															fill="currentColor"
+															stroke="currentColor"
+															stroke-width="1"
+															stroke-linecap="round"
+															stroke-linejoin="round"
+															class="feather feather-play">
+															<polygon points="5 3 19 12 5 21 5 3" />
+														</svg>
+													</div>
+													<span class="access-text" data-target="videos"
+														>Video</span
+													>
+												</div>
+
+												<div class="access-link-wrapper">
+													<div class="access-icon" data-target="document">
+														<svg
+															xmlns="http://www.w3.org/2000/svg"
+															width="56"
+															height="56"
+															viewBox="0 0 24 24"
+															fill="none"
+															stroke="currentColor"
+															stroke-width="1"
+															stroke-linecap="round"
+															stroke-linejoin="round"
+															class="feather feather-file-text">
+															<path
+																d="M2 2v20h20V6.334a.334.334 0 0 0-.097-.236l-4.001-4a.334.334 0 0 0-.236-.097H2z"></path>
+															<polyline points="8 2 8 8 14 8"></polyline>
+															<line x1="8" y1="12" x2="16" y2="12"></line>
+															<polyline
+																points="8 16 8 22 20 22 20 2"></polyline>
+														</svg>
+													</div>
+													<span class="access-text" data-target="document"
+														>Docs</span
+													>
+												</div>
+												<div class="access-link-wrapper">
+													<div class="access-icon" data-target="files">
+														<svg
+															xmlns="http://www.w3.org/2000/svg"
+															width="56"
+															height="56"
+															viewBox="0 0 24 24"
+															fill="none"
+															stroke="currentColor"
+															stroke-width="1"
+															stroke-linecap="round"
+															stroke-linejoin="round"
+															class="feather feather-layers">
+															<polygon points="12 2 2 7 12 12 22 7 12 2" />
+															<polyline points="2 17 12 22 22 17" />
+															<polyline points="2 12 12 17 22 12" />
+														</svg>
+													</div>
+													<span class="access-text" data-target="files"
+														>Files</span
+													>
+												</div>
+												<div class="access-link-wrapper">
+													<div class="access-icon" data-target="upload">
+														<svg
+															xmlns="http://www.w3.org/2000/svg"
+															viewBox="0 -960 960 960"
+															fill="#EA3323">
+															<path
+																d="M200-120v-33.85h560V-120H200Zm185.38-150.77v-271.54H254.46L480-840l224.62 297.69H573.85v271.54H385.38Zm33.85-33.85H540V-582.1h90.56L480-784.67 328.67-582.1h90.56v277.48ZM480-582.1Z" />
+														</svg>
+													</div>
+													<span class="access-text" data-target="upload"
+														>Upload Files</span
+													>
+												</div>
+											</div>
+										</section>
+									</div>
+
+									<div class="chart-data-details">
+										<div class="chart-details-header"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="chart-container-wrapper big">
+							<div class="chart-container">
+								<div
+									id="slideShow"
+									class="slideShow"
+									style="
+										display: block;
+										background-color: rgba(0, 0, 0, 0);
+										width: 100%;
+									">
+									<p>Image collection</p>
+
+									<div id="photoSlider" class="photoSlider">
+										<div class="container" id="spinner"></div>
+										<div class="container" id="spinner"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="chart-row three" style="display: none">
+							<div class="chart-container-wrapper">
+								<div class="chart-container">
+									<div class="chart-info-wrapper"></div>
+									<div class="chart-svg">
+										<div id="sessions"></div>
+										<div id="tableName"></div>
+
+										aaaa
+									</div>
+								</div>
+							</div>
+							<div class="chart-container-wrapper">
+								<div class="chart-container">
+									<div class="chart-info-wrapper">aaa</div>
+									<div class="chart-svg"></div>
+								</div>
+							</div>
+							<div class="chart-container-wrapper">
+								<div class="chart-container">
+									aaaa
+									<div class="chart-info-wrapper">aaa</div>
+								</div>
+							</div>
+						</div>
+					</section>
+				</section>
+
+				<section class="section photos" id="photos">
+					<!-- photos contents go in here -->
+					<div class="h-1">
+						<h2>Photos</h2>
+					</div>
+
+					<div class="main-header-line">
+						<div class="content-action-buttons">
+							<button class="open-right-area-4" id="open-right-area">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="feather feather-activity">
+									<polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+								</svg>
+							</button>
+							<button class="menu-button-4" id="menu-button">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="feather feather-menu">
+									<line x1="3" y1="12" x2="21" y2="12" />
+									<line x1="3" y1="6" x2="21" y2="6" />
+									<line x1="3" y1="18" x2="21" y2="18" />
+								</svg>
+							</button>
+						</div>
+
+						<input
+							type="text"
+							id="searchBar"
+							placeholder="Search files..."
+							onkeyup="search()" />
+					</div>
+					<div id="photosfileList">
+						<div class="container" id="spinner"></div>
+						<div class="msg"></div>
+					</div>
+
+					<div id="imageModal" class="modal" aria-hidden="true">
+						<div class="modal-content-container">
+							<div class="button-n-group">
+								<div class="button-n-group-left">
+									<span class="close-btn" aria-label="Close">
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											width="24"
+											height="24"
+											viewBox="0 0 24 24"
+											fill="none"
+											stroke="currentColor"
+											stroke-width="2"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											class="feather feather-x">
+											<line x1="18" y1="6" x2="6" y2="18" />
+											<line x1="6" y1="6" x2="18" y2="18" />
+										</svg>
+									</span>
+									<span class="file-modal-top-title-file-name"
+										>{{filename}} filename</span
+									>
+								</div>
+
+								<div class="button-n-group-right">
+									<div class="button-n-group-titlebar-button">
+										<span class="image-changes-indicator">No changes</span>
+
+										<hr class="image-indicator-separator" />
+										<button class="btn-cancel">
+											<span class="">Cancel</span>
+										</button>
+
+										<div class="btn-container" onclick="toggleDropdown()">
+											<div class="dropdown">
+												<button class="dropdown-btn">
+													Save
+													<svg
+														viewBox="0 0 24 24"
+														fill="none"
+														role="presentation"
+														focusable="false"
+														style="margin-left: -2px; margin-right: -2px"
+														data-testid="digButtonDropdownIcon">
+														<path
+															d="m5.25 9.25 6.5 6.25 6.5-6.25"
+															stroke="currentColor"
+															stroke-width="1.5"
+															stroke-miterlimit="10"
+															vector-effect="non-scaling-stroke"></path>
+													</svg>
+												</button>
+												<div id="dropdown-content" class="dropdown-content">
+													<span id="saveButton" class="custom-button"
+														>Save a Copy</span
+													>
+													<span
+														id="replaceButton"
+														class="custom-button"
+														onclick="replaceOriginal()">
+														Replace Original
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="modal-button-group">
+								<div class="modal-button-group-left">
+									<div class="icon rotate-left">
+										<div class="tooltip">Rotate Left</div>
+										<span>
+											<button
+												id="rotateLeftButton"
+												aria-label="Rotate Image Left">
+												<svg
+													viewBox="0 0 24 24"
+													fill="none"
+													class="dig-UIIcon dig-UIIcon--small"
+													role="presentation"
+													focusable="false">
+													<path
+														d="M8.5 7.5V9H4V4.5h1.5v2.24C6.831 4.95 9.027 4 12 4c5.159 0 8 2.841 8 8h-1.5c0-4.374-2.126-6.5-6.5-6.5-2.433 0-4.167.662-5.229 2H8.5Z"
+														fill="currentColor"
+														vector-effect="non-scaling-stroke"></path>
+													<path
+														fill-rule="evenodd"
+														clip-rule="evenodd"
+														d="M7.23 10.987h9.54v9H7.23v-9Zm8.04 7.5v-6H8.73v6h6.54Z"
+														fill="currentColor"
+														vector-effect="non-scaling-stroke"></path>
+												</svg>
+											</button>
+										</span>
+									</div>
+									<div class="icon rotate-right">
+										<div class="tooltip">Rotate Right</div>
+										<span>
+											<button
+												id="rotateRightButton"
+												aria-label="Rotate Image Right">
+												<svg
+													viewBox="0 0 24 24"
+													fill="none"
+													class="dig-UIIcon dig-UIIcon--small"
+													width="32"
+													height="32"
+													role="presentation"
+													focusable="false">
+													<path
+														d="M15.5 7.5V9H20V4.5h-1.5v2.24C17.169 4.95 14.973 4 12 4c-5.159 0-8 2.841-8 8h1.5c0-4.374 2.126-6.5 6.5-6.5 2.433 0 4.167.662 5.229 2H15.5Z"
+														fill="currentColor"
+														vector-effect="non-scaling-stroke"></path>
+													<path
+														fill-rule="evenodd"
+														clip-rule="evenodd"
+														d="M16.77 10.987H7.23v9h9.54v-9Zm-8.04 7.5v-6h6.54v6H8.73Z"
+														fill="currentColor"
+														vector-effect="non-scaling-stroke"></path>
+												</svg>
+											</button>
+										</span>
+									</div>
+									<div class="icon flip">
+										<div class="tooltip">Flip Horizontal</div>
+										<span>
+											<button
+												id="flipHorizontalButton"
+												aria-label="Flip Image Horizontal">
+												<svg
+													viewBox="0 0 24 24"
+													fill="none"
+													class="dig-UIIcon dig-UIIcon--small"
+													role="presentation"
+													focusable="false">
+													<path
+														fill-rule="evenodd"
+														clip-rule="evenodd"
+														d="M11.5 3v18H13V3h-1.5ZM10 4.5V6H6v12h4v1.5H4.5v-15H10ZM16.5 18h-2v1.5h2V18Zm1.5 1.5V18h1.5v1.5H18Zm0-3h1.5v-2H18v2Zm1.5-3.5H18v-2h1.5v2ZM18 9.5h1.5v-2H18v2ZM19.5 6V4.5H18V6h1.5Zm-3 0h-2V4.5h2V6Z"
+														fill="currentColor"
+														vector-effect="non-scaling-stroke"></path>
+												</svg>
+											</button>
+										</span>
+									</div>
+									<div class="icon crop">
+										<div class="tooltip">Crop</div>
+										<span>
+											<button id="cropButton" aria-label="Crop Image">
+												<svg
+													viewBox="0 0 24 24"
+													fill="none"
+													class="dig-UIIcon dig-UIIcon--small"
+													width="32"
+													height="32"
+													role="presentation"
+													focusable="false">
+													<path
+														d="M7.5 2.5H6V6H2.5v1.5h14V15H18V6H7.5V2.5Z"
+														fill="currentColor"
+														vector-effect="non-scaling-stroke"></path>
+													<path
+														d="M21.5 16.5h-14V9H6v9h10.5v3.5H18V18h3.5v-1.5Z"
+														fill="currentColor"
+														vector-effect="non-scaling-stroke"></path>
+												</svg>
+											</button>
+										</span>
+									</div>
+								</div>
+								<div class="modal-button-group-right">
+									<div class="icon undo">
+										<div class="tooltip">Undo</div>
+										<span>
+											<button id="undoButton" aria-label="Undo Image" disabled>
+												<svg
+													viewBox="0 0 24 24"
+													fill="none"
+													class="dig-UIIcon dig-UIIcon--standard"
+													width="20"
+													height="20"
+													role="presentation"
+													focusable="false">
+													<path
+														d="m6.824 6.35 1.07 1.05-1.077 1.1h8.714c1.359.005 2.512.34 3.32 1.148C19.668 10.463 20 11.628 20 13c0 1.372-.333 2.537-1.148 3.352S16.872 17.5 15.5 17.5H11V16h4.368v-.001L15.5 16c1.151 0 1.862-.28 2.29-.71.43-.428.71-1.139.71-2.29 0-1.152-.28-1.862-.71-2.291-.428-.43-1.139-.709-2.29-.709l-.132.001V10H6.84l1.053 1.067-1.067 1.054-2.84-2.877L6.825 6.35Z"
+														fill="currentColor"
+														vector-effect="non-scaling-stroke"></path>
+												</svg>
+											</button>
+										</span>
+									</div>
+									<div class="icon redo">
+										<div class="tooltip">Redo</div>
+										<span
+											class="modal-button-group-right-button"
+											id="buttonContainer">
+											<button id="redoButton" aria-label="Redo Image" disabled>
+												<svg
+													viewBox="0 0 24 24"
+													fill="none"
+													class="dig-UIIcon dig-UIIcon--standard"
+													width="20"
+													height="20"
+													role="presentation"
+													focusable="false">
+													<path
+														d="m17.176 6.35-1.07 1.05 1.077 1.1H8.47c-1.359.005-2.512.34-3.32 1.148C4.332 10.463 4 11.628 4 13c0 1.372.333 2.537 1.148 3.352S7.128 17.5 8.5 17.5H13V16H8.632v-.001L8.5 16c-1.151 0-1.862-.28-2.291-.71-.43-.428-.709-1.139-.709-2.29 0-1.152.28-1.862.709-2.291.43-.43 1.14-.709 2.291-.709l.132.001V10h8.528l-1.053 1.067 1.067 1.054 2.84-2.877-2.838-2.894Z"
+														fill="currentColor"
+														vector-effect="non-scaling-stroke"></path>
+												</svg>
+											</button>
+										</span>
+									</div>
+								</div>
+							</div>
+
+							<div class="modal-image-container">
+								<div class="modal-image-content">
+									<img id="modalImage" src="" alt="" />
+								</div>
+							</div>
+						</div>
+
+						<div id="popupModal" class="popup-modal" style="display: none">
+							<div class="modal-con">
+								<p id="popupMessage"></p>
+							</div>
+						</div>
+					</div>
+
+					<div id="confirmationModal" class="confirmationModal modal">
+						<div class="confirm-modal-content-container">
+							<div class="modal-body-content">
+								<div class="cnt">
+									<span>Discard changes?</span>
+									<p>
+										This file contains unsaved changes. If you leave the file
+										now, your changes will be lost. To save the changes, stay on
+										the page and click Done.
+									</p>
+								</div>
+							</div>
+
+							<div class="modal-body-button-container">
+								<button id="stayOnPageButton">Stay on Page</button>
+								<button id="discardChangesButton">Discard Changes</button>
+							</div>
+						</div>
+					</div>
+
+					<div id="reloadConfirmationModal" style="display: none">
+						<div class="modal-content">
+							<p>
+								This page is asking you to confirm that you want to leave —
+								information you’ve entered may not be saved.
+							</p>
+							<div class="modal-buttons">
+								<button id="stayOnPageReloadButton">Stay on Page</button>
+								<button id="leavePageButton">Leave Page</button>
+							</div>
+						</div>
+					</div>
+
+					<!-- Modal for entering new filename -->
+					<div class="modal" id="filenameModal" tabindex="-1" role="dialog">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title">Enter New Filename</h5>
+									<button
+										type="button"
+										class="close"
+										data-dismiss="modal"
+										aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<form id="filenameForm">
+										<div class="form-group">
+											<label for="newFilename">New Filename:</label>
+											<input
+												type="text"
+												class="form-control"
+												id="newFilename"
+												required />
+										</div>
+									</form>
+								</div>
+								<div class="modal-footer">
+									<button
+										type="button"
+										class="btn btn-secondary"
+										data-dismiss="modal">
+										Cancel
+									</button>
+									<button
+										type="button"
+										class="btn btn-primary"
+										id="saveFilenameBtn">
+										Save
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section class="section videos" id="videos">
+					<!-- videos contents go in here -->
+					<div class="h-1">
+						<h2>Video Files</h2>
+					</div>
+					<div class="main-header-line">
+						<div class="content-action-buttons">
+							<button class="open-right-area-2" id="open-right-area">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="feather feather-activity">
+									<polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+								</svg>
+							</button>
+							<button class="menu-button-2" id="menu-button">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="feather feather-menu">
+									<line x1="3" y1="12" x2="21" y2="12" />
+									<line x1="3" y1="6" x2="21" y2="6" />
+									<line x1="3" y1="18" x2="21" y2="18" />
+								</svg>
+							</button>
+						</div>
+
+						<input
+							type="text"
+							id="videosearchBar"
+							placeholder="Search files..."
+							onkeyup="search()" />
+					</div>
+					<div id="videofileList">
+						<!-- Example spinner element -->
+						<div class="container" id="spinner"></div>
+						<div class="msg"></div>
+						<div class="msg-box-container"></div>
+					</div>
+				</section>
+
+				<section class="section audios" id="audios">
+					<!-- audios contents go in here -->
+					<div class="h-1">
+						<h2>Audio Files</h2>
+					</div>
+
+					<div class="main-header-line">
+						<div class="content-action-buttons">
+							<button class="open-right-area-3" id="open-right-area">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="feather feather-activity">
+									<polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+								</svg>
+							</button>
+							<button class="menu-button-3" id="menu-button">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="feather feather-menu">
+									<line x1="3" y1="12" x2="21" y2="12" />
+									<line x1="3" y1="6" x2="21" y2="6" />
+									<line x1="3" y1="18" x2="21" y2="18" />
+								</svg>
+							</button>
+						</div>
+
+						<input
+							type="text"
+							id="audiosearchBar"
+							placeholder="Search files..."
+							onkeyup="search()" />
+					</div>
+					<div id="messageContainer" class="msg"></div>
+					<div id="audiofileList">
+						<div class="container" id="spinner"></div>
+					</div>
+				</section>
+
+				<section class="section files" id="files">
+					<!-- files contents go in here -->
+					<div class="h-1">
+						<h1>Files</h1>
+					</div>
+					<div class="main-header-line">
+						<div class="content-action-buttons">
+							<button
+								class="open-right-area-1"
+								id="open-right-area"
+								title="Show right area">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="feather feather-activity">
+									<polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+								</svg>
+							</button>
+							<button
+								class="menu-button-1"
+								id="menu-button"
+								title="Show/hide the menu">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="feather feather-menu">
+									<line x1="3" y1="12" x2="21" y2="12" />
+									<line x1="3" y1="6" x2="21" y2="6" />
+									<line x1="3" y1="18" x2="21" y2="18" />
+								</svg>
+							</button>
+						</div>
+						<input
+							type="text"
+							id="filessearchBar"
+							placeholder="Search files..."
+							onkeyup="search()" />
+					</div>
+					<!-- <div id="fileList"></div> -->
+					<div id="otherFilesList">
+						<div class="container" id="spinner"></div>
+						<div class="msg"></div>
+						<div class="msg-box-container"></div>
+					</div>
+				</section>
+
+				<section class="section document" id="document">
+					<!-- documents contents go in here -->
+					<div class="h-1">
+						<h2>Documents</h2>
+					</div>
+
+					<div class="main-header-line">
+						<div class="content-action-buttons">
+							<button
+								class="open-right-area-6"
+								id="open-right-area"
+								title="Show/hide the menu">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="feather feather-activity">
+									<polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+								</svg>
+							</button>
+							<button
+								class="menu-button-6"
+								id="menu-button"
+								title="Show/hide the menu">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="feather feather-menu">
+									<line x1="3" y1="12" x2="21" y2="12" />
+									<line x1="3" y1="6" x2="21" y2="6" />
+									<line x1="3" y1="18" x2="21" y2="18" />
+								</svg>
+							</button>
+						</div>
+
+						<input
+							type="text"
+							id="docsearchBar"
+							placeholder="Search files..."
+							onkeyup="search()" />
+					</div>
+					<div id="docfileList">
+						<div class="container" id="spinner"></div>
+						<div class="msg"></div>
+					</div>
+				</section>
+
+				<section class="section deletedfiles" id="deletedfiles">
+					<!-- documents contents go in here -->
+					<div class="h-1">
+						<h2>Deleted Files</h2>
+					</div>
+
+					<div class="main-header-line">
+						<div class="content-action-buttons">
+							<button
+								class="open-right-area-7"
+								id="open-right-area"
+								title="Show/hide the menu">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="feather feather-activity">
+									<polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+								</svg>
+							</button>
+							<button
+								class="menu-button-7"
+								id="menu-button"
+								title="Show/hide the menu">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="feather feather-menu">
+									<line x1="3" y1="12" x2="21" y2="12" />
+									<line x1="3" y1="6" x2="21" y2="6" />
+									<line x1="3" y1="18" x2="21" y2="18" />
+								</svg>
+							</button>
+						</div>
+
+						<input
+							type="text"
+							id="delsearchBar"
+							placeholder="Search files..."
+							onkeyup="search()" />
+					</div>
+
+					<div id="deleted-files-container">
+						<h3>Deleted Files</h3>
+						<ul id="deleted-files-list"></ul>
+						<button id="recover-selected-files">Recover Selected Files</button>
+					</div>
+				</section>
+
+				<section class="section settings" id="settings">
+					<!-- documents contents go in here -->
+					<div class="h-1">
+						<h2>Personal Account</h2>
+					</div>
+					<div class="main-header-line">
+						<div class="content-action-buttons">
+							<button
+								class="open-right-area-settings"
+								id="open-right-area"
+								title="Show/hide the menu">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="feather feather-activity">
+									<polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+								</svg>
+							</button>
+							<button
+								class="menu-button-settings"
+								id="menu-button"
+								title="Show/hide the menu">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="feather feather-menu">
+									<line x1="3" y1="12" x2="21" y2="12" />
+									<line x1="3" y1="6" x2="21" y2="6" />
+									<line x1="3" y1="18" x2="21" y2="18" />
+								</svg>
+							</button>
+						</div>
+					</div>
+					<div class="main-header-line-2">
+						<ul class="nav-lnks">
+							<li class="links active">
+								<a href="/general" id="General-link">General</a>
+							</li>
+							<li>
+								<a href="/notification" id="Notification-link">Notification</a>
+							</li>
+							<li>
+								<a href="/security" id="Security-link">Security</a>
+							</li>
+							<li>
+								<a href="/privacy" id="Privacy-link">Privacy</a>
+							</li>
+						</ul>
+					</div>
+
+					<div class="sec general active" id="general">
+						<div class="gen-container">
+							<h3>Basics</h3>
+							<hr />
+							<div class="row-con">
+								<div class="row-p">
+									<h2>Profile</h2>
+								</div>
+								<div class="profile-con">
+									<div class="profile-con-contents">
+										{% if profile_picture %}
+										<div
+											class="profile-picture"
+											style="background-image: url('data:image/jpeg;base64,{{ profile_picture }}')"></div>
+										{% else %}
+										<div
+											class="profile-picture"
+											style="
+												background-image: url('https://via.placeholder.com/150');
+											"></div>
+										{% endif %}
+										<div class="profile-rm-btn">
+											<form
+												id="removeProfilePictureForm"
+												method="POST"
+												action="/remove_profile_picture">
+												<a href="#" id="removeProfilePictureLink"
+													>Remove Profile</a
+												>
+											</form>
+										</div>
+									</div>
+
+									<div class="profile-info">
+										<a
+											href="#"
+											data-toggle="modal"
+											data-target="#editProfileModal"
+											>Edit</a
+										>
+									</div>
+								</div>
+							</div>
+							<hr id="hr" />
+
+							<div class="row-con">
+								<div class="row-p">
+									<h2>Name</h2>
+								</div>
+								<div class="profile-con">
+									<label class="switcher" for="username" id="currentUsername"
+										>{{ username }}</label
+									>
+									<div class="profile-info">
+										<a href="#" data-toggle="modal" data-target="#editUserModal"
+											>Edit</a
+										>
+									</div>
+								</div>
+							</div>
+							<hr id="hr" />
+							<div class="row-con">
+								<div class="row-p">
+									<h2>Email</h2>
+								</div>
+								<div class="profile-con">
+									<label class="switcher" for="email" id="currentEmail"
+										>{{ email }}</label
+									>
+									<div class="profile-info">
+										<a
+											href="#"
+											data-toggle="modal"
+											data-target="#changeEmailModal"
+											>Edit</a
+										>
+									</div>
+								</div>
+							</div>
+							<hr id="hr" />
+							<h2 class="dl-hrd">Delete Account</h2>
+							<hr class="hr-ln" />
+							<div class="row-acc">
+								<div class="row-acc-info">
+									<h3>Delete iSharee Account</h3>
+									<p>If you delete your account, your data will be lost</p>
+								</div>
+								<div class="profile-info">
+									<button
+										type="button"
+										class="btn btn-danger"
+										data-toggle="modal"
+										data-target="#deleteAccountModal">
+										Delete my account
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- notification section -->
+					<div class="sec notification" id="notification">
+						<div class="gen-container">
+							<h3>Notification Settings</h3>
+							<hr />
+							<div class="notification-content">
+								<h2>Alerts</h2>
+								<h4>Manage Your Notifications</h4>
+								<p>Choose how you want to receive notifications:</p>
+
+								<p class="em-h2-inmwo">Email me when:</p>
+								<div class="notification-option">
+									<input
+										type="checkbox"
+										id="emailNotifications"
+										name="emailNotifications" />
+									<label for="emailNotifications"
+										>Receive email notifications</label
+									>
+								</div>
+								<div class="notification-option">
+									<input
+										type="checkbox"
+										id="pushNotifications"
+										name="pushNotifications" />
+									<label for="pushNotifications"
+										>Receive push notifications</label
+									>
+								</div>
+								<div class="notification-option">
+									<input
+										type="checkbox"
+										id="sharedFilesNotifications"
+										name="sharedFilesNotifications" />
+									<label for="sharedFilesNotifications"
+										>Receive shared files notifications</label
+									>
+								</div>
+								<div class="notification-option">
+									<input
+										type="checkbox"
+										id="deletedFilesNotifications"
+										name="deletedFilesNotifications" />
+									<label for="deletedFilesNotifications"
+										>Receive multiple deleted files notifications</label
+									>
+								</div>
+								<div class="notification-option">
+									<input
+										type="checkbox"
+										id="newBrowserSignInNotifications"
+										name="newBrowserSignInNotifications" />
+									<label for="newBrowserSignInNotifications"
+										>A new browser is used to sign in</label
+									>
+								</div>
+								<hr />
+								<h4>Notification Preferences</h4>
+								<p>Customize the types of notifications you receive:</p>
+								<ul>
+									<li>Updates on new messages and activities</li>
+									<li>Alerts on important account changes</li>
+									<li>Reminders for upcoming events</li>
+								</ul>
+								<p>
+									For more details, check our
+									<a href="/help/notification-settings"
+										>Notification Settings Help</a
+									>.
+								</p>
+							</div>
+						</div>
+						<div id="flashMessage" class="flash-message"></div>
+					</div>
+
+					<!-- security section -->
+					<div class="sec security" id="security">
+						<div class="gen-container">
+							<h3>Security</h3>
+							<hr />
+							<div class="row-acc">
+								<div class="row-acc-info">
+									<h3>Change Password</h3>
+									<p>Change your password</p>
+								</div>
+								<div class="profile-info">
+									<button
+										type="button"
+										class="btn btn-danger"
+										data-toggle="modal"
+										data-target="#changePasswordModal">
+										Change Password
+									</button>
+								</div>
+							</div>
+							<div class="row-acc">
+								<div class="row-acc-info">
+									<h3>Change Email</h3>
+									<p>Change your email</p>
+								</div>
+								<div class="profile-info">
+									<button
+										type="button"
+										class="btn btn-danger"
+										data-toggle="modal"
+										data-target="#changeEmailModal">
+										Change Email
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- privacy section -->
+					<div class="sec privacy" id="privacy">
+						<div class="gen-container">
+							<h3>Privacy</h3>
+							<hr />
+							<div class="privacy-content">
+								<h4>Your Privacy Settings</h4>
+								<p>
+									Here you can manage your privacy preferences and settings:
+								</p>
+
+								<!-- Example of Privacy Settings Options -->
+								<div class="privacy-option">
+									<input
+										type="checkbox"
+										id="profileVisibility"
+										name="profileVisibility"
+										checked />
+									<label for="profileVisibility"
+										>Make my profile visible to other users</label
+									>
+								</div>
+								<div class="privacy-option">
+									<input
+										type="checkbox"
+										id="emailNotifications"
+										name="emailNotifications" />
+									<label for="emailNotifications"
+										>Receive email notifications</label
+									>
+								</div>
+
+								<!-- Add more privacy settings options as needed -->
+
+								<hr />
+								<h4>Your Data Privacy</h4>
+								<p>How we protect and handle your data:</p>
+								<ul>
+									<li>
+										We do not share your personal information with third parties
+										without your consent.
+									</li>
+									<li>Your data is encrypted and stored securely.</li>
+									<li>
+										You have the right to request access to and deletion of your
+										personal data.
+									</li>
+								</ul>
+
+								<!-- Additional information or links related to data privacy -->
+								<p>
+									For more details, please read our
+									<a href="/privacy-policy">Privacy Policy</a>.
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Delete Account Modal -->
+					<div
+						class="modal fade"
+						id="deleteAccountModal"
+						tabindex="-1"
+						role="dialog"
+						aria-labelledby="deleteAccountModalLabel"
+						aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="deleteAccountModalLabel">
+										Delete Account
+									</h5>
+									<button
+										type="button"
+										class="close"
+										data-dismiss="modal"
+										aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									Are you sure you want to delete your account? This action
+									cannot be undone.
+								</div>
+								<div class="modal-footer">
+									<form method="POST" action="{{ url_for('delete_account') }}">
+										<button
+											type="button"
+											class="btn btn-secondary"
+											data-dismiss="modal">
+											Cancel
+										</button>
+										<button type="submit" class="btn btn-danger">Delete</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Edit Profile Modal -->
+					<div
+						class="modal fade"
+						id="editProfileModal"
+						tabindex="-1"
+						role="dialog"
+						aria-labelledby="editProfileModalLabel"
+						aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="editProfileModalLabel">
+										Edit Profile
+									</h5>
+									<button
+										type="button"
+										class="close"
+										data-dismiss="modal"
+										aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<form
+										method="POST"
+										action="/update_profile_picture"
+										enctype="multipart/form-data"
+										id="profilePictureForm">
+										<div class="form-group">
+											<label for="profile_picture">Profile Picture:</label>
+
+											<div class="profile_picture_body">
+												<!-- Hidden file input -->
+												<input
+													type="file"
+													id="profile_picture"
+													name="profile_picture"
+													accept="image/*"
+													class="form-control" />
+												<div class="profile-picture-body-con">
+													<button
+														type="button"
+														id="selectProfilePictureButton"
+														class="btn btn-secondary">
+														Select Profile Picture
+													</button>
+													<small
+														class="form-text text-muted"
+														id="profile_picture_help">
+														Upload a new profile picture.
+													</small>
+												</div>
+
+												<div class="profile-picture-content">
+													<img
+														id="profile_picture_preview"
+														src=""
+														alt="Profile Picture"
+														class="img-fluid" />
+												</div>
+											</div>
+										</div>
+
+										<button type="submit" class="btn btn-primary">
+											Update Profile
+										</button>
+									</form>
+									<div id="flash-messages"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Password Change Modal -->
+					<div
+						class="modal fade"
+						id="changePasswordModal"
+						tabindex="-1"
+						role="dialog"
+						aria-labelledby="changePasswordModalLabel"
+						aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="changePasswordModalLabel">
+										Change Password
+									</h5>
+									<button
+										type="button"
+										class="close"
+										data-dismiss="modal"
+										aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<!-- Form for password change -->
+									<form id="changePasswordForm">
+										<div class="form-group">
+											<label for="currentPassword">Current Password</label>
+											<div class="form-group-in">
+												<input
+													type="password"
+													class="form-control"
+													id="currentPassword"
+													name="currentPassword"
+													required />
+												<i class="bx bxs-hide password-toggle"></i>
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="newPassword">New Password</label>
+											<div class="form-group-in">
+												<input
+													type="password"
+													class="form-control"
+													id="newPassword"
+													name="newPassword"
+													required />
+												<i class="bx bxs-hide password-toggle"></i>
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="confirmNewPassword"
+												>Confirm New Password</label
+											>
+											<div class="form-group-in">
+												<input
+													type="password"
+													class="form-control"
+													id="confirmNewPassword"
+													name="confirmNewPassword"
+													required />
+												<i class="bx bxs-hide password-toggle"></i>
+											</div>
+										</div>
+										<button type="submit" class="btn btn-primary">
+											Change Password
+										</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Email Change Modal -->
+					<div
+						class="modal fade"
+						id="changeEmailModal"
+						tabindex="-1"
+						role="dialog"
+						aria-labelledby="changeEmailModalLabel"
+						aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="changeEmailModalLabel">
+										Change Email
+									</h5>
+									<button
+										type="button"
+										class="close"
+										data-dismiss="modal"
+										aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<!-- Flash messages -->
+									<div id="flash-messages"></div>
+
+									<!-- Form for email change -->
+									<form
+										id="changeEmailForm"
+										method="POST"
+										action="{{ url_for('change_email') }}">
+										<div class="form-group">
+											<label for="newEmail">New Email Address</label>
+											<input
+												type="email"
+												class="form-control"
+												id="newEmail"
+												name="newEmail"
+												required />
+										</div>
+										<button type="submit" class="btn btn-primary">
+											Change Email
+										</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Username Change Modal -->
+					<div
+						class="modal fade"
+						id="editUserModal"
+						tabindex="-1"
+						role="dialog"
+						aria-labelledby="editUserModalLabel"
+						aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="editUserModalLabel">
+										Change Username
+									</h5>
+									<button
+										type="button"
+										class="close"
+										data-dismiss="modal"
+										aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<!-- Placeholder for success message -->
+									<div id="usernameChangeMessage" class="alert d-none"></div>
+
+									<!-- Form for username change -->
+									<form id="changeUsernameForm">
+										<div class="form-group">
+											<label for="newUsername">New Username</label>
+											<input
+												type="text"
+												class="form-control"
+												id="newUsername"
+												name="newUsername"
+												required />
+										</div>
+										<button type="submit" class="btn btn-primary">
+											Change Username
+										</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section class="section upload" id="upload">
+					<!-- upload contents go in here -->
+					<div class="h-1">
+						<h2>Upload Files</h2>
+					</div>
+
+					<div class="main-header-line">
+						<div class="content-action-buttons">
+							<button class="open-right-area-5" id="open-right-area">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="feather feather-activity">
+									<polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+								</svg>
+							</button>
+							<button class="menu-button-5" id="menu-button">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="feather feather-menu">
+									<line x1="3" y1="12" x2="21" y2="12" />
+									<line x1="3" y1="6" x2="21" y2="6" />
+									<line x1="3" y1="18" x2="21" y2="18" />
+								</svg>
+							</button>
+						</div>
+					</div>
+
+					<div class="upload-wrapper">
+						<div class="content" id="uploadContainer" style="display: block">
+							<input
+								type="file"
+								id="fileInput"
+								multiple
+								style="display: none"
+								onchange="displaySelectedFiles()" />
+						</div>
+
+						<!-- Drag and Drop Area -->
+						<div
+							id="dropArea"
+							class="drop-area"
+							ondrop="handleDrop(event)"
+							ondragover="handleDragOver(event)"
+							ondragleave="handleDragLeave(event)">
+							<div class="icon cloud">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 -960 960 960"
+									fill="#75FB4C">
+									<path
+										d="M260-160q-91 0-155.5-63T40-377q0-78 47-139t123-78q25-92 100-149t170-57q117 0 198.5 81.5T760-520q69 8 114.5 59.5T920-340q0 75-52.5 127.5T740-160H520q-33 0-56.5-23.5T440-240v-206l-64 62-56-56 160-160 160 160-56 56-64-62v206h220q42 0 71-29t29-71q0-42-29-71t-71-29h-60v-80q0-83-58.5-141.5T480-720q-83 0-141.5 58.5T280-520h-20q-58 0-99 41t-41 99q0 58 41 99t99 41h100v80H260Zm220-280Z" />
+								</svg>
+							</div>
+
+							<p>
+								<strong>Drag</strong> and <strong>drop</strong> files here
+								<br /><strong>------OR------</strong>
+							</p>
+
+							<button id="selectFilesButton" onclick="triggerFileInput()">
+								Select Files
+							</button>
+						</div>
+
+						<div class="up-btn-container">
+							<button id="uploadFile" onclick="uploadFile()">Upload</button>
+						</div>
+
+						<div class="pb-contaiver wrapper">
+							<div class="totalfilesize">
+								<span>File Size </span>
+								<span id="totalFileSize"></span>
+							</div>
+							<div
+								id="selectedFiles"
+								style="position: relative; width: 100%"></div>
+							<div id="progressBarContainer" style="display: block">
+								<div id="progressBar"></div>
+							</div>
+						</div>
+
+						<div id="uploadMessage" style="display: block"></div>
+						<div id="uploadMessage2" style="display: block"></div>
+					</div>
+				</section>
+			</div>
+
+			<!-- #####################---- end of main section----############################> -->
+
+			<!-- #####################---- Right app Menu----############################> -->
+			<div class="app-right" id="app-right-menu">
+				<button class="close-right" id="close_right" title="Show/hide the menu">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="24"
+						height="24"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="feather feather-x">
+						<line x1="18" y1="6" x2="6" y2="18" />
+						<line x1="6" y1="6" x2="18" y2="18" />
+					</svg>
+				</button>
+				<div class="profile-box">
+					<div class="profile-con big">
+						{% if profile_picture %}
+						<div
+							class="profile-picture big"
+							style="background-image: url('data:image/jpeg;base64,{{ profile_picture }}')"></div>
+						{% else %}
+						<div
+							class="profile-picture big"
+							style="
+								background-image: url('https://via.placeholder.com/150');
+							"></div>
+						{% endif %}
+					</div>
+
+					<div class="prof-contents">
+						<div class="prof-log-btn">
+							<div class="profile-cn">
+								<span class="profile-text">{{username}}</span>
+							</div>
+							<div class="logout-icon">
+								<i class="fa-solid fa-right-from-bracket"></i>
+								<span id="logout-btn" class="logout-button">
+									<a href="{{ url_for('logout') }}">Logout</a>
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<hr class="hr-line" />
+				</div>
+
+				<div class="app-right-content">
+					<div class="app-right-section">
+						<div class="dark-theme-toggle">
+							<div class="menu">
+								<div class="menu-header">
+									<h2 class="menu-header-title">Theme</h2>
+									<div class="theme-switcher">
+										<input
+											type="radio"
+											id="light-theme"
+											name="themes"
+											checked />
+										<label for="light-theme" class="switcher">
+											<span> <i class="sun" data-feather="sun"></i>Light </span>
+										</label>
+										<input type="radio" id="dark-theme" name="themes" />
+										<label for="dark-theme" class="switcher">
+											<span>
+												<i class="moon" data-feather="moon"></i>Dark
+											</span>
+										</label>
+										<input type="radio" id="black-theme" name="themes" />
+										<label for="black-theme" class="switcher">
+											<span>
+												<i class="star" data-feather="star"></i>Black
+											</span>
+										</label>
+										<span class="slider"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="app-right-section-header">
+							<h2>Messages</h2>
+							<span class="notification-active">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="16"
+									height="16"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="feather feather-message-square">
+									<path
+										d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+								</svg>
+							</span>
+						</div>
+
+						<div class="message-line">
+							<!-- <i class="fa-regular fa-message"></i> -->
+							<div class="message-text-wrapper">
+								<div class="ms-contents">
+									<i class="fa-regular fa-message"></i>
+									<p class="message-text">New Message</p>
+								</div>
+
+								<p class="message-subtext">
+									You have recieved a file from {{username}}
+								</p>
+								<div id="message" class="message"></div>
+							</div>
+						</div>
+
+						<div class="app-right-section">
+							<div class="app-right-section-header">
+								<h2>Activity</h2>
+								<span class="notification-active">
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										width="16"
+										height="16"
+										viewBox="0 0 24 24"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="2"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										class="feather feather-bell">
+										<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+										<path d="M13.73 21a2 2 0 0 1-3.46 0" />
+									</svg>
+								</span>
+							</div>
+
+							<div class="activity-line">
+								<span class="activity-icon warning">
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										width="16"
+										height="16"
+										viewBox="0 0 24 24"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="2"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										class="feather feather-alert-circle">
+										<circle cx="12" cy="12" r="10" />
+										<line x1="12" y1="8" x2="12" y2="12" />
+										<line x1="12" y1="16" x2="12.01" y2="16" />
+									</svg>
+								</span>
+
+								<div class="activity-text-wrapper">
+									<div id="recentlyUploadedfileList"></div>
+									<div id="recentlyAddedFiles">
+										<span id="storageSize"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- #####################---- end of Right app Menu----############################> -->
+		</div>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://unpkg.com/feather-icons"></script>
+		<script src="/static/js/app.js"></script>
+		<script src="/static/js/upload.js"></script>
+		<script src="/static/js/script.js"></script>
+		<script src="/static/js/j.js"></script>
+		<script src="/static/js/quichaccess.js"></script>
+		<script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+
+		<!-- Add Bootstrap JS and dependencies -->
+		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+	</body>
+</html>
