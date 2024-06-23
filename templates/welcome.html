@@ -1,78 +1,269 @@
+<!-- @format -->
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to iSharee</title>
-    <link rel="stylesheet" href="/static/css/welcome.css">
-</head>
-<body>
-    <div class="container">
-        <header>
-            <div class="header-top">
-                <h1>Welcome to iSharee</h1>
-                <div class="acc-dtls">
-                    <a href="#">login</a>
-                    <a href="">signup</a>
-                </div>
-            </div>
-            
-            <p>Seamless File Sharing, Anytime, Anywhere</p>
-        </header>
-        <main>
-            <section class="intro">
-                <p>Welcome to iSharee! Your ultimate destination for quick, easy, and secure file sharing. Whether you're collaborating with colleagues, sharing photos with friends, or transferring important documents, iSharee has you covered.</p>
-            </section>
-            <section class="why-choose">
-                <h2>Why Choose iSharee?</h2>
-                <ul>
-                    <li><strong>User-Friendly Interface</strong>: Intuitive design ensures a smooth and hassle-free experience.</li>
-                    <li><strong>Lightning-Fast Transfers</strong>: Upload and download your files at incredible speeds.</li>
-                    <li><strong>Robust Security</strong>: Your privacy is our priority. We use state-of-the-art encryption to keep your files safe.</li>
-                    <li><strong>Cross-Platform Access</strong>: Share and access your files from any device, anywhere in the world.</li>
-                    <li><strong>Generous Storage</strong>: Enjoy ample storage space for all your file-sharing needs.</li>
-                </ul>
-            </section>
-            <section class="get-started">
-                <h2>Get Started in Three Easy Steps</h2>
-                <ol>
-                    <li><strong>Sign Up</strong>: Create your free iSharee account.</li>
-                    <li><strong>Upload</strong>: Drag and drop files or select them from your device.</li>
-                    <li><strong>Share</strong>: Instantly share your files with a unique link or invite users to view or download.</li>
-                </ol>
-            </section>
-            <section class="features">
-                <h2>Features You'll Love</h2>
-                <ul>
-                    <li><strong>Unlimited File Types</strong>: Share documents, photos, videos, music, and more.</li>
-                    <li><strong>Customizable Links</strong>: Personalize your share links for easy identification.</li>
-                    <li><strong>Activity Tracking</strong>: Keep track of who viewed and downloaded your files.</li>
-                    <li><strong>File Versioning</strong>: Access previous versions of your files with ease.</li>
-                    <li><strong>Collaboration Tools</strong>: Work together with shared folders and real-time updates.</li>
-                </ul>
-            </section>
-            <section class="cta">
-                <h2>Join the iSharee Community</h2>
-                <p>Join thousands of satisfied users who trust iSharee for their file-sharing needs. Sign up today and experience the future of file sharing.</p>
-                <div class="buttons">
-                    <a href="#" class="button">Sign Up for Free</a>
-                    <a href="#" class="button">Learn More</a>
-                </div>
-            </section>
-        </main>
-        <footer>
-            <nav>
-                <a href="#">About Us</a>
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
-                <a href="#">Contact Us</a>
-            </nav>
-            <div class="social-media">
-                <a href="#">Facebook</a>
-                <a href="#">Twitter</a>
-                <a href="#">LinkedIn</a>
-            </div>
-        </footer>
-    </div>
-</body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>File Sharing App</title>
+		<link rel="stylesheet" href="/static/css/welcome.css" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+	</head>
+	<body>
+		<nav class="navbar">
+            <span><a href=""><img src="/static/assets/images/logo.png" alt="">iSharee</a> </span>
+			<div class="navbar-nav">
+				<a class="nav-link" href="{{ url_for('login') }}">Log In</a>
+				<a class="nav-link" href="{{ url_for('register') }}">Sign Up!</a>
+                <a class="mb4-t5" href="#">Jumb in</a>
+			</div>
+
+		</nav>
+
+		<div class="container">
+			<div class="jumbotron">
+				<h1 class="display-4">
+					Join the iSharee Community Trusted by Thousands
+				</h1>
+				<p class="lead">
+					The easiest way to share files privately with anyone, anywhere.
+				</p>
+				<hr class="my-4" />
+				<p class="my-md-34">
+					Sign up or log in to start sharing your files now.
+				</p>
+
+				<div class="btn-container">
+					<a
+						class="btn btn-primary btn-lg"
+						href="{{ url_for('register') }}"
+						role="button"
+						>Sign Up</a
+					>
+					<a
+						class="btn btn-secondary btn-lg"
+						href="{{ url_for('login') }}"
+						role="button"
+						>Login</a
+					>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-4">
+					<div class="card col-img">
+						<img src="/static/assets/images/images.jpeg" alt="Secure" />
+						<div class="card-body">
+							<p class="card-text">
+								Easily share files with your friends and colleagues.
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="card col-img">
+						<img src="/static/assets/images/images.jpeg" alt="Secure" />
+						<div class="card-body">
+							<p class="card-text">
+								Your files are secure with our state-of-the-art encryption.
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="card col-img">
+						<img src="/static/assets/images/images.jpeg" alt="Secure" />
+						<div class="card-body">
+							<p class="card-text">Experience lightning-fast file transfers.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-12">
+					<h2 class="text-center">What Can You Do with iSharee?</h2>
+				</div>
+				<div class="col-md-4">
+					<div class="card">
+						<div class="card-body">
+							<h5 class="card-title">Store and Protect Your Files</h5>
+							<p class="card-text">
+								Get the storage you and your teams need with security features
+								like file recovery, password protection, watermarking, and
+								viewer history.
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="card">
+						<div class="card-body">
+							<h5 class="card-title">Stay in Control of Shared Content</h5>
+							<p class="card-text">
+								Trackable links show when someone has opened a shared file and
+								how long they’ve engaged with it. Plus, you can turn off access
+								for any individual at any time without affecting others’
+								permissions.
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="card">
+						<div class="card-body">
+							<h5 class="card-title">Collaborate on Your Work</h5>
+							<p class="card-text">
+								Directly edit PDFs and use video tools to streamline feedback
+								and approval processes.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row con-m4d">
+				<div class="col-12">
+					<h2 class="text-center">How Will You Use iSharee?</h2>
+				</div>
+				<div class="col-md-6">
+					<div class="card">
+						<div class="card-body">
+							<div class="img-container">
+								<img src="/static/assets/images/image.png" alt="" />
+							</div>
+							<h5 class="card-title">For Work</h5>
+							<p class="card-text">
+								Work efficiently with teammates and clients, stay in sync on
+								projects, and keep company data safe—all in one place.
+							</p>
+							<a class="btn btn-primary" href="{{ url_for('register') }}"
+								>Get iSharee for Work</a
+							>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="card">
+						<div class="card-body">
+							<div class="img-container">
+								<img src="/static/assets/images/user.png" alt="" />
+							</div>
+							<h5 class="card-title">For Personal Use</h5>
+							<p class="card-text">
+								Keep everything that’s important to you and your family
+								shareable and safe in one place. Back up files in the cloud,
+								share photos and videos, and more.
+							</p>
+							<a class="btn btn-secondary" href="{{ url_for('register') }}"
+								>Get iSharee for Personal Use</a
+							>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row md-4w">
+				<div class="col-12">
+					<h2>Get started with iSharee</h2>
+					<button>
+						<a href="" class="btn-m4x"
+							>View plan details
+							<svg
+								viewBox="0 0 24 24"
+								fill="none"
+								class="dig-UIIcon dig-UIIcon--standard"
+								width="24"
+								height="24"
+								role="presentation"
+								focusable="false">
+								<path
+									d="M5 11.75h12m-5.25-6.5 6.25 6.5-6.25 6.5"
+									stroke="currentColor"
+									stroke-width="1.5"
+									stroke-miterlimit="10"
+									vector-effect="non-scaling-stroke"></path>
+								<a href="">View plan details</a>
+							</svg>
+						</a>
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- Footer Section -->
+		<div class="footer-content">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-3">
+						<h4>iSharee</h4>
+						<ul>
+							<li><a href="#">Integrations</a></li>
+							<li><a href="#">Features</a></li>
+						</ul>
+					</div>
+					<div class="col-md-3">
+						<h4>Products</h4>
+						<ul>
+							<li><a href="#">Plus</a></li>
+							<li><a href="#">Professional</a></li>
+						</ul>
+					</div>
+					<div class="col-md-3">
+						<h4>Features</h4>
+						<ul>
+							<li><a href="#">Send large files</a></li>
+							<li><a href="#">Send long videos</a></li>
+						</ul>
+					</div>
+					<div class="col-md-3">
+						<h4>Support</h4>
+						<ul>
+							<li><a href="#">Help center</a></li>
+							<li><a href="#">Contact us</a></li>
+						</ul>
+					</div>
+					<div class="col-md-3">
+						<h4>Resources</h4>
+						<ul>
+							<li><a href="#">Blog</a></li>
+							<li><a href="#">Customer stories</a></li>
+						</ul>
+					</div>
+					<div class="col-md-3">
+						<h4>Company</h4>
+						<ul>
+							<li><a href="#">About us</a></li>
+							<li><a href="#">Jobs</a></li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="social-media-container">
+					<div class="container">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="social-media">
+									<a href="#"><i class="fab fa-facebook-f"></i></a>
+									<a href="#"><i class="fab fa-twitter"></i></a>
+									<a href="#"><i class="fab fa-linkedin-in"></i></a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Footer -->
+		<footer class="footer">
+			<div class="container">
+				<span class="text-muted"
+					>© 2024 File Sharing App. All rights reserved.</span
+				>
+			</div>
+		</footer>
+	</body>
 </html>

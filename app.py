@@ -1832,7 +1832,11 @@ def main(path=None):
 
 @app.route('/')
 def index():
-    return redirect(url_for('login'))
+    return redirect(url_for('welcome'))
+
+@app.route('/welcome')
+def welcome():
+    return render_template('welcome.html')
 
 @app.route('/email_verified', methods=['GET'])
 def email_verification():
@@ -1862,7 +1866,7 @@ def logout():
     session.clear()
     session.pop('session', None)
 
-    response = make_response(redirect(url_for('login')))
+    response = make_response(redirect(url_for('welcome')))
     response.set_cookie('session_id', '', expires=0)
     response.set_cookie('session', '', expires=0)
     flash('You have been logged out.', 'success')
